@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:18-alpine
+    restart: always # Container restarts when necessary
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD} # psql user password
+      - POSTGRES_USER=${POSTGRES_USER} # psql user name
+      - POSTGRES_DB=${POSTGRES_DB} # Database name
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - ${ADMINER_PORT}
+    depends_on:
+      # `depends_on` tells Docker to wait until the service is launched
+      # but this doesn't connects services.
+      - db
+
+  backend:
+    restart: always
+    build:
+      context: backend # Folder where the Dockerfile is located
+    volumes:
+      - ./backend:/app # Binds local an container files
+      - /app/node_modules # Excludes local and container node_modules from binding
+    environment:
+      - PGUSER=${POSTGRES_USER}
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+      - PGHOST=${POSTGRES_HOST}
+      - PGDATABASE=${POSTGRES_DB}
+      - JWT_SECRET=${BACKEND_JWT_SECRET}
+      - JWT_RT_TTL=${BACKEND_JWT_RT_TTL}
+    ports:
+      - ${BACKEND_PORT}
+    depends_on:
+      - db
+
+  frontend:
+    restart: always
+    build:
+      context: frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=${FRONTEND_VITE_API_URL}
+    ports:
+      - ${FRONTEND_PORT}

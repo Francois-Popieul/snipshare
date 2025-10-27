@@ -1,0 +1,19 @@
+@import '../../stylesheets/variables.css';
+
+.brand {
+    font-family: var(--font-mono);
+    color: var(--color-slate-600);
+    font-weight: 600;
+}
+
+.brand_small {
+    font-size: 1rem;
+}
+
+.brand_medium {
+    font-size: 1.4rem;
+}
+
+.brand_large {
+    font-size: 1.75rem;
+}

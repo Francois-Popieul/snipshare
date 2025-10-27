@@ -1,0 +1,16 @@
+.row_flex_container {
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-slate-50);
+}
+
+.copyright {
+    font-family: var(--font-mono);
+    color: var(--color-slate-600);
+    font-size: 1rem;
+    text-align: right;
+}
