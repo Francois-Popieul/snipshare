@@ -1,3 +1,9 @@
+@import '../../stylesheets/variables.css';
+
+.logo {
+    color: var(--color-slate-600);
+}
+
 .logo_small {
     width: 48px;
     height: auto;

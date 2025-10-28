@@ -9,7 +9,7 @@ interface BrandLogoProps {
 function BrandLogo(props: BrandLogoProps) {
     return (
         <MdCode
-            className={clsx(
+            className={clsx("logo",
                 `logo_${props.width}`
             )}
         />

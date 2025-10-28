@@ -1,5 +1,8 @@
+import { Link } from "react-router";
 import Footer from "../components/partials/Footer";
 import Navbar from "../components/partials/Navbar";
+import Button from "../components/ui/Button";
+import "../main.css"
 
 function SnippetForm() {
     return <>
