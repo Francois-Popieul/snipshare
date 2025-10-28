@@ -1,46 +1,43 @@
-import { Link } from "react-router";
 import Footer from "../components/partials/Footer";
 import Navbar from "../components/partials/Navbar";
-import Button from "../components/ui/Button";
 import "../main.css"
+import FormContainer from "../components/ui/FormContainer";
+import FormInputGroup from "../components/ui/FormInputGroup";
+import FormSelectGroup from "../components/ui/FormSelectGroup";
 
 function SignupForm() {
+    function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event?.preventDefault();
+    }
+
     return <>
         <Navbar />
         <main>
-            <form action="" method="post" className="form">
-                <h1 className="form_title">Créer un compte</h1>
-                <p className="form_presentation">Rejoignez vos collègues pour partager du code</p>
-                <div className="form_group">
-                    <label htmlFor="full_name" className="form_label">Nom complet : </label>
-                    <input type="text" name="full_name" id="full_name" className="form_input" required />
-                </div>
-                <div className="form_group">
-                    <label htmlFor="gender" className="form_label">Sexe : </label>
-                    <select name="gender" id="gender-select" className="form_select">
-                        <option value="">--Indiquez votre sexe--</option>
-                        <option value="male">Homme</option>
-                        <option value="female">Femme</option>
-                    </select>
-                </div>
-                <div className="form_group">
-                    <label htmlFor="email" className="form_label">Adresse e-mail : </label>
-                    <input type="email" name="email" id="email" className="form_input" required />
-                </div>
-                <div className="form_group">
-                    <label htmlFor="password" className="form_label">Mot de passe : </label>
-                    <input type="password" name="password" id="password" className="form_input" required />
-                </div>
-                <div className="form_group">
-                    <label htmlFor="password_verification" className="form_label">Confirmer le mot de passe : </label>
-                    <input type="password" name="password_verification" id="password_verification" className="form_input" required />
-                </div>
-                <div className="form_centered_container">
-                    <Button name="Valider" variant="plain" width="medium" />
-                    <p>Vous avez déjà un compte ?</p>
-                    <Link to={"/login"}>Connectez-vous.</Link>
-                </div>
-            </form>
+            <FormContainer
+                title="Créer un compte"
+                presentation="Rejoignez vos collègues pour partager du code"
+                button_name="Valider"
+                onSubmit={HandleSubmit}
+                link={{
+                    link_message: "Vous avez déjà un compte ?",
+                    link_destination: "/login",
+                    link_text: "Connectez-vous."
+                }}>
+                <FormInputGroup label="Nom complet :" name="fullname" type="text" />
+                <FormSelectGroup
+                    label="Genre :"
+                    name="gender"
+                    options={[
+                        { value: "", name: "--Indiquez votre genre--" },
+                        { value: "male", name: "Homme" },
+                        { value: "female", name: "Femme" },
+                        { value: "other", name: "Autre" },
+                    ]}
+                />
+                <FormInputGroup label="Adresse e-mail :" name="email" type="email" />
+                <FormInputGroup label="Mot de passe :" name="password" type="password" />
+                <FormInputGroup label="Confirmer le mot de passe :" name="password_confirmation" type="password" />
+            </FormContainer>
         </main>
         <Footer />
     </>
