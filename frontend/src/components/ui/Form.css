@@ -23,6 +23,17 @@
     font-size: 1.3rem;
 }
 
+.form_fieldset {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.form_legend {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
 .form_group {
     display: flex;
     flex-direction: column;
@@ -40,6 +51,12 @@
 
 .form_input,
 .form_select {
+    font-size: 1rem;
+    width: 100%;
+}
+
+.form_textarea {
+    resize: vertical;
     font-size: 1rem;
     width: 100%;
 }
