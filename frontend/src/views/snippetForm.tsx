@@ -11,6 +11,9 @@ import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
 function SnippetForm() {
     function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+        console.log("Données du formulaire :", data);
     }
 
     return <>

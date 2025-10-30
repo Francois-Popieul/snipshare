@@ -7,7 +7,11 @@ import FormSelectGroup from "../components/ui/FormSelectGroup";
 
 function SignupForm() {
     function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event?.preventDefault();
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+        console.log("Données du formulaire :", data);
+
     }
 
     return <>
@@ -28,7 +32,7 @@ function SignupForm() {
                     label="Genre :"
                     name="gender"
                     options={[
-                        { value: "", name: "--Indiquez votre genre--" },
+                        { value: "", name: "-- Indiquez votre genre --" },
                         { value: "male", name: "Homme" },
                         { value: "female", name: "Femme" },
                         { value: "other", name: "Autre" },
