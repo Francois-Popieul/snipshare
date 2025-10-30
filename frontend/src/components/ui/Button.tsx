@@ -5,7 +5,7 @@ interface ButtonProps {
   name: string;
   variant: "plain" | "outline";
   width?: "default" | "very_small" | "small" | "medium" | "large" | "extra_large";
-  type: "submit" | "button";
+  type?: "submit" | "button";
   special?: "right_side" | "left_side";
   onClick?: () => void;
 }

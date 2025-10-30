@@ -1,6 +1,7 @@
 import type React from "react";
 import Button from "./Button";
 import { Link } from "react-router";
+import { useIsMobile } from "../../hooks/useMobile";
 
 interface FormContainerProps {
     title: string;
@@ -16,9 +17,13 @@ interface FormContainerProps {
 }
 
 function FormContainer(props: FormContainerProps) {
-
-    return <form onSubmit={props.onSubmit} action="" method="post" className="form">
-        <h1 className="form_title">{props.title}</h1>
+    const isMobile = useIsMobile();
+    return <form
+        onSubmit={props.onSubmit}
+        action=""
+        method="post"
+        className={isMobile ? "form mobile_form" : "form desktop_form"}>
+        <h1 className="form_title" > {props.title}</h1>
         <p className="form_presentation">{props.presentation}</p>
         {props.children}
         <div className="form_centered_container">
@@ -26,7 +31,7 @@ function FormContainer(props: FormContainerProps) {
             {props.link && <><p>{props.link.link_message}</p>
                 <Link to={props.link.link_destination}>{props.link.link_text}</Link></>}
         </div>
-    </form>
+    </form >
 }
 
 export default FormContainer;

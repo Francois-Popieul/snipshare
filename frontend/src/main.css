@@ -8,6 +8,11 @@ body {
     font-family: var(--font-sans);
 }
 
+/* main {
+    max-width: 1200px;
+    margin: 0 auto;
+} */
+
 .home_section {
     display: flex;
     flex-direction: column;
@@ -64,6 +69,14 @@ body {
     margin: 1rem auto;
     padding: 0.25rem;
     box-sizing: border-box;
+}
+
+.mobile_profile_form {
+    width: 450px;
+}
+
+.desktop_profile_form {
+    width: 700px;
 }
 
 .profile_main_container {
@@ -130,8 +143,6 @@ body {
     color: var(--color-slate-700);
 }
 
-
-
 .profile_snippet_container {
     display: flex;
     flex-direction: column;
@@ -147,4 +158,11 @@ body {
     justify-content: center;
     grid-area: 1rem;
     flex-wrap: wrap;
+}
+
+.profile_update_buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }

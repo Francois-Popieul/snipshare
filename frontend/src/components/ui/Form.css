@@ -8,10 +8,17 @@
     background-color: var(--color-slate-50);
     border: solid 2px var(--color-slate-300);
     border-radius: 10px;
-    width: 450px;
     padding: 1rem;
     margin: 0.5rem auto;
     box-sizing: border-box;
+}
+
+.mobile_form {
+    width: 450px;
+}
+
+.desktop_form {
+    width: 700px;
 }
 
 .form_title {

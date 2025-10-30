@@ -7,6 +7,8 @@ import Button from "../components/ui/Button";
 import "../main.css";
 import { useState } from "react";
 import SnippetCard from "../components/ui/SnippetCard";
+import { useIsMobile } from "../hooks/useMobile";
+import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
 
 interface ProfileProps {
     id: number;
@@ -19,11 +21,16 @@ interface ProfileProps {
 }
 
 function Profile(props: ProfileProps) {
-
+    const isMobile = useIsMobile();
     const [userEditMode, SetUserEditMode] = useState(false);
+    const [snippetToggler, SetSnippetToggler] = useState(false);
 
     function toggleUserEdit() {
         SetUserEditMode(prev => !prev);
+    }
+
+    function toggleSnippetToggler() {
+        SetSnippetToggler(prev => !prev);
     }
 
     function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -36,7 +43,7 @@ function Profile(props: ProfileProps) {
     return <>
         <Navbar />
         <main>
-            <form action="" method="post" className="profile_form" onSubmit={HandleSubmit}>
+            <form action="" method="post" className={isMobile ? "profile_form mobile_profile_form" : "profile_form desktop_profile_form"} onSubmit={HandleSubmit}>
                 <div className="profile_main_container">
                     <div className="profile_top_container">
                         <div className="user_details">
@@ -60,7 +67,7 @@ function Profile(props: ProfileProps) {
                             />
                         )}
                     </div>
-                    {props.bio === "" && <div className="biography">Vous n'avez encore saisi aucune information à votre sujet.</div>}
+                    {props.bio ? <div className="biography">{props.bio}</div> : <div className="biography">Aucune information saisie à votre sujet. Cliquez sur <strong>Modifier</strong> pour ajouter votre biographie.</div>}
                 </div>
 
                 {userEditMode === true && (
@@ -76,19 +83,22 @@ function Profile(props: ProfileProps) {
                                 { value: "other", name: "Autre" },
                             ]}
                         />
+                        <FormTextAreaGroup label="Biographie :" name="bio" max_length={2000} rows={5}></FormTextAreaGroup>
                         <FormInputGroup label="Mot de passe actuel :" name="current_password" type="password" />
                         <FormInputGroup label="Nouveau mot de passe :" name="new_paswword" type="password" />
                         <FormInputGroup label="Confirmer le nouveau mot de passe :" name="new_paswword_confirmation" type="password" />
-                        <Button type="submit" name="Mettre à jour" variant="plain" width="medium" />
-                        <Button type="button" name="Annuler" variant="outline" width="medium" onClick={toggleUserEdit} />
+                        <div className="profile_update_buttons">
+                            <Button type="submit" name="Mettre à jour" variant="plain" width="medium" />
+                            <Button type="button" name="Annuler" variant="outline" width="medium" onClick={toggleUserEdit} />
+                        </div>
 
                     </>
                 )}
             </form>
             <div className="profile_snippet_container">
                 <div className="snippet_buttons">
-                    <Button type="button" name="Snippets créés" variant="plain" width="extra_large" special="left_side"></Button>
-                    <Button type="button" name="Snippets likés" variant="outline" width="extra_large" special="right_side"></Button>
+                    <Button type="button" name="Snippets créés" variant={snippetToggler === false ? "plain" : "outline"} width="extra_large" special="left_side" onClick={toggleSnippetToggler}></Button>
+                    <Button type="button" name="Snippets likés" variant={snippetToggler === false ? "outline" : "plain"} width="extra_large" special="right_side" onClick={toggleSnippetToggler}></Button>
                 </div>
                 <div className="profile_snippet_list">
                     <SnippetCard

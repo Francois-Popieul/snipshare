@@ -16,12 +16,12 @@ function Homepage() {
                 <h2 className="home_title">Partagez des snippets avec vos collègues, développez de manière collaborative</h2>
                 <p className="home_description">Une plateforme collaborative pour partager du code réutilisable entre développeurs. partager ses connaissances et accélérer le développement au sein du service public.</p>
                 <div>
-                    <Link to={"/snippets"}><Button name="Voir les snippets" width="medium" variant="outline" /></Link>
-                    <Link to={"/signup"}><Button name="Commencer" width="medium" variant="plain" /></Link></div>
+                    <Link to={"/snippets"}><Button type="button" name="Voir les snippets" width="medium" variant="outline" /></Link>
+                    <Link to={"/signup"}><Button type="button" name="Commencer" width="medium" variant="plain" /></Link></div>
             </div>
             <div className="home_section">
                 <h2 className="home_title">Pourquoi SnipShare ?</h2>
-                <p className="home_description">Tout ce qu’il vous faut pour partager du code,  collaborer et éviter que les développeurs du service public français restent la risée du monde</p>
+                <p className="home_description">Tout ce qu’il vous faut pour partager du code, collaborer et améliorer la qualité des outils numériques du service public.</p>
                 <div className={isMobile ? "vignette_column_flex_container" : "vignette_row_flex_container"}>
                     <HomepageVignette
                         icon={<MdCode size={48} />}
@@ -41,8 +41,8 @@ function Homepage() {
                 <MdOutlineHandshake size={64} />
                 <h2>Prêt à partager votre code ?</h2>
                 <p>Rejoignez vos collègues pour construire une base de codes réutilisables dès aujourd’hui.</p>
-                <div><Link to={"/signup"}><Button name="Créer un compte" width="medium" variant="plain" /></Link>
-                    <Link to={"/snippets"}><Button name="Voir les snippets" width="medium" variant="outline" /></Link></div>
+                <div><Link to={"/signup"}><Button type="button" name="Créer un compte" width="medium" variant="plain" /></Link>
+                    <Link to={"/snippets"}><Button type="button" name="Voir les snippets" width="medium" variant="outline" /></Link></div>
             </div>
         </main>
         <Footer />
