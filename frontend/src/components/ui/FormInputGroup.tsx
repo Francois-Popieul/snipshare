@@ -6,6 +6,7 @@ interface FormInputGroupProps {
     label: string;
     name: string;
     type: InputType;
+    readonly?: boolean;
 }
 
 function FormInputGroup(props: FormInputGroupProps) {

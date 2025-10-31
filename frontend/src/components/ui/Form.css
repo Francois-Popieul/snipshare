@@ -73,3 +73,12 @@
     margin: 1rem auto 0;
     text-align: center;
 }
+
+.code_input {
+    font-family: var(--font-mono);
+    background-color: var(--color-slate-100);
+    color: var(--color-slate-950);
+    padding: 8px;
+    white-space: pre;
+    overflow: auto;
+}

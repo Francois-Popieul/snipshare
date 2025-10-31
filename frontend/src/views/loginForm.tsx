@@ -5,7 +5,7 @@ import FormContainer from "../components/ui/FormContainer";
 import FormInputGroup from "../components/ui/FormInputGroup";
 
 function LoginForm() {
-    function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
@@ -19,7 +19,7 @@ function LoginForm() {
                 title="Bienvenue"
                 presentation="Connectez-vous pour continuer"
                 button_name="Valider"
-                onSubmit={HandleSubmit}
+                onSubmit={handleSubmit}
                 link={{
                     link_message: "Vous n’avez pas encore de compte ?",
                     link_destination: "/signup",

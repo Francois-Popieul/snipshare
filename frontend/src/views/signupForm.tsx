@@ -6,12 +6,16 @@ import FormInputGroup from "../components/ui/FormInputGroup";
 import FormSelectGroup from "../components/ui/FormSelectGroup";
 
 function SignupForm() {
-    function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
         console.log("Données du formulaire :", data);
 
+    }
+
+    function setGender(selectedGender: string) {
+        console.log("Genre sélectionné :", selectedGender);
     }
 
     return <>
@@ -21,7 +25,7 @@ function SignupForm() {
                 title="Créer un compte"
                 presentation="Rejoignez vos collègues pour partager du code"
                 button_name="Valider"
-                onSubmit={HandleSubmit}
+                onSubmit={handleSubmit}
                 link={{
                     link_message: "Vous avez déjà un compte ?",
                     link_destination: "/login",
@@ -37,6 +41,7 @@ function SignupForm() {
                         { value: "female", name: "Femme" },
                         { value: "other", name: "Autre" },
                     ]}
+                    onChange={setGender}
                 />
                 <FormInputGroup label="Adresse e-mail :" name="email" type="email" />
                 <FormInputGroup label="Mot de passe :" name="password" type="password" />

@@ -36,7 +36,7 @@
 }
 
 .button_default {
-    width: 125px;
+    width: fit-content;
     height: 40px;
 }
 
@@ -67,6 +67,7 @@
 }
 
 .button_extra_large {
+    flex: 2 0 50%;
     width: 225px;
     height: 40px;
 }

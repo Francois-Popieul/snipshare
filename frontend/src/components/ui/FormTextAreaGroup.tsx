@@ -5,6 +5,7 @@ interface FormTextAreaGroupProps {
     name: string;
     max_length: number;
     rows: number;
+    readonly?: boolean;
 }
 
 function FormTextAreaGroup(props: FormTextAreaGroupProps) {

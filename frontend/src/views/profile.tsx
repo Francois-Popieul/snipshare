@@ -33,17 +33,22 @@ function Profile(props: ProfileProps) {
         SetSnippetToggler(prev => !prev);
     }
 
-    function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
         console.log("Données du formulaire :", data);
     }
 
+    function setGender(selectedGenderValue: string, selectedGenderName: string) {
+        console.log("Genre sélectionné :", selectedGenderValue);
+        console.log("Genre sélectionné :", selectedGenderName);
+    }
+
     return <>
         <Navbar />
         <main>
-            <form action="" method="post" className={isMobile ? "profile_form mobile_profile_form" : "profile_form desktop_profile_form"} onSubmit={HandleSubmit}>
+            <form action="" method="post" className={isMobile ? "profile_form mobile_profile_form" : "profile_form desktop_profile_form"} onSubmit={handleSubmit}>
                 <div className="profile_main_container">
                     <div className="profile_top_container">
                         <div className="user_details">
@@ -82,6 +87,7 @@ function Profile(props: ProfileProps) {
                                 { value: "female", name: "Femme" },
                                 { value: "other", name: "Autre" },
                             ]}
+                            onChange={setGender}
                         />
                         <FormTextAreaGroup label="Biographie :" name="bio" max_length={2000} rows={5}></FormTextAreaGroup>
                         <FormInputGroup label="Mot de passe actuel :" name="current_password" type="password" />
@@ -96,7 +102,7 @@ function Profile(props: ProfileProps) {
                 )}
             </form>
             <div className="profile_snippet_container">
-                <div className="snippet_buttons">
+                <div className={isMobile ? "snippet_button_container mobile_snippet_button_container" : "snippet_button_container desktop_snippet_button_container"}>
                     <Button type="button" name="Snippets créés" variant={snippetToggler === false ? "plain" : "outline"} width="extra_large" special="left_side" onClick={toggleSnippetToggler}></Button>
                     <Button type="button" name="Snippets likés" variant={snippetToggler === false ? "outline" : "plain"} width="extra_large" special="right_side" onClick={toggleSnippetToggler}></Button>
                 </div>

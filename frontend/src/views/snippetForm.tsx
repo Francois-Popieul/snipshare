@@ -7,14 +7,44 @@ import FormSelectGroup from "../components/ui/FormSelectGroup";
 import "../main.css"
 import FormFieldset from "../components/ui/FormFieldset";
 import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
+import FormCodeInputGroup from "../components/ui/FormCodeInputGroup";
+import { useState } from "react";
+import SnippetTag from "./SnippetTag";
+
+interface Tag {
+    value: string;
+    name: string;
+}
+
 
 function SnippetForm() {
-    function HandleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const [selectedLanguage, SetSelectedlanguage] = useState("");
+    const [selectedTags, SetSelectedTags] = useState<Tag[]>([]);
+
+
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
         console.log("Données du formulaire :", data);
     }
+
+    function setLanguage(selectedLanguageValue: string, selectedLanguageName: string) {
+        console.log("Langage sélectionné :", selectedLanguageValue);
+        console.log("Langage sélectionné :", selectedLanguageName);
+        SetSelectedlanguage(selectedLanguageValue);
+    }
+
+    function addTag(selectedTagValue: string, selectedTagName: string) {
+        console.log("Étiquette sélectionnée :", selectedTagValue);
+        console.log("Étiquette sélectionnée :", selectedTagName);
+        if (selectedTags.includes({ value: selectedTagValue, name: selectedTagName })) { return };
+        if (selectedTags.length > 4) { return };
+
+        SetSelectedTags(prev => [...prev, { value: selectedTagValue, name: selectedTagName }]);
+
+    }
+
 
     return <>
         <Navbar />
@@ -23,10 +53,10 @@ function SnippetForm() {
                 title="Ajouter un snippet"
                 presentation="Partagez un extrait de code réutilisable qui pourrait servir à vos collègues"
                 button_name="Ajouter le snippet"
-                onSubmit={HandleSubmit}>
+                onSubmit={handleSubmit}>
                 <FormFieldset legend={"Code"}>
                     <FormInputGroup label="Titre :" name="title" type="text" />
-                    <FormTextAreaGroup label="Description :" name="description" max_length={500} rows={5} />
+                    <FormTextAreaGroup label="Description :" name="description" max_length={500} rows={5}></FormTextAreaGroup>
                     <FormSelectGroup
                         label="Langage :"
                         name="language"
@@ -51,8 +81,9 @@ function SnippetForm() {
                             { value: "shell", name: "Shell / Bash" },
                             { value: "sql", name: "SQL" }
                         ]}
+                        onChange={setLanguage}
                     />
-                    <FormTextAreaGroup label="Code :" name="code" max_length={5000} rows={20} />
+                    <FormCodeInputGroup label="Code :" name="code" max_length={5000} rows={20} />
                     <FormSelectGroup
                         label="Étiquette :"
                         name="tag"
@@ -74,7 +105,14 @@ function SnippetForm() {
                             { value: "animation", name: "Animation" },
                             { value: "doc", name: "Documentation" }
                         ]}
+                        onChange={addTag}
                     />
+                    <div id="tag_container" className="tag_container">
+                        {selectedTags.map((tag, index) => (
+                            <SnippetTag key={index} name={tag.name} />
+                        ))}
+
+                    </div>
                 </FormFieldset>
             </FormContainer>
         </main >
