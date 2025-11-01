@@ -22,15 +22,15 @@ interface ProfileProps {
 
 function Profile(props: ProfileProps) {
     const isMobile = useIsMobile();
-    const [userEditMode, SetUserEditMode] = useState(false);
-    const [snippetToggler, SetSnippetToggler] = useState(false);
+    const [userEditMode, setUserEditMode] = useState(false);
+    const [snippetToggler, setSnippetToggler] = useState(false);
 
     function toggleUserEdit() {
-        SetUserEditMode(prev => !prev);
+        setUserEditMode(prev => !prev);
     }
 
     function toggleSnippetToggler() {
-        SetSnippetToggler(prev => !prev);
+        setSnippetToggler(prev => !prev);
     }
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

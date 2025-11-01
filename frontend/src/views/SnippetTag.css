@@ -1,0 +1,8 @@
+.snippet_tag_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: fit-content;
+}

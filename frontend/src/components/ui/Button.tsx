@@ -1,3 +1,4 @@
+import type React from "react";
 import "./Button.css";
 import clsx from "clsx";
 
@@ -7,6 +8,7 @@ interface ButtonProps {
   width?: "default" | "very_small" | "small" | "medium" | "large" | "extra_large";
   type?: "submit" | "button";
   special?: "right_side" | "left_side";
+  children?: React.ReactNode;
   onClick?: () => void;
 }
 
@@ -21,7 +23,7 @@ function Button(props: ButtonProps) {
       )}
       onClick={props.onClick}
     >
-      {props.name}
+      {props.name}{props.children}
     </button>
   );
 };

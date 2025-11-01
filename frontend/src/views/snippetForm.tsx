@@ -10,17 +10,28 @@ import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
 import FormCodeInputGroup from "../components/ui/FormCodeInputGroup";
 import { useState } from "react";
 import SnippetTag from "./SnippetTag";
+import Toaster from "../components/ui/Toaster";
+import type { ToastMessage } from "../components/ui/Toaster";
 
-interface Tag {
+export interface Tag {
     value: string;
     name: string;
 }
 
-
 function SnippetForm() {
-    const [selectedLanguage, SetSelectedlanguage] = useState("");
-    const [selectedTags, SetSelectedTags] = useState<Tag[]>([]);
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+    const [selectedVisibility, setSelectedVisibility] = useState("");
+    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+    const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
 
+    function showToast(
+        type: ToastMessage["type"],
+        message: string,
+        position: ToastMessage["position"],
+        duration: number
+    ) {
+        setToastMessage({ type, message, position, duration });
+    }
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -31,20 +42,47 @@ function SnippetForm() {
 
     function setLanguage(selectedLanguageValue: string, selectedLanguageName: string) {
         console.log("Langage sélectionné :", selectedLanguageValue);
-        console.log("Langage sélectionné :", selectedLanguageName);
-        SetSelectedlanguage(selectedLanguageValue);
+        setSelectedLanguage(selectedLanguageValue);
+    }
+
+    function setVisibility(selectedVisibilityValue: string, selectedVisibilityName: string) {
+        console.log("Visibilité sélectionnée :", selectedVisibilityValue);
+        setSelectedVisibility(selectedVisibilityValue);
     }
 
     function addTag(selectedTagValue: string, selectedTagName: string) {
         console.log("Étiquette sélectionnée :", selectedTagValue);
-        console.log("Étiquette sélectionnée :", selectedTagName);
-        if (selectedTags.includes({ value: selectedTagValue, name: selectedTagName })) { return };
-        if (selectedTags.length > 4) { return };
 
-        SetSelectedTags(prev => [...prev, { value: selectedTagValue, name: selectedTagName }]);
+        if (selectedTagName === "-- Sélectionnez une étiquette --") {
+            return;
+        }
 
+        if (selectedTags.some(tag => tag.value === selectedTagValue)) {
+            showToast(
+                "information",
+                "Étiquette déjà ajoutée.",
+                "top_center",
+                3000
+            );
+            return;
+        }
+
+        if (selectedTags.length >= 5) {
+            showToast(
+                "error",
+                "Vous ne pouvez pas ajouter plus de 5 étiquettes",
+                "top_center",
+                3000
+            );
+            return;
+        }
+
+        setSelectedTags((prev: Tag[]) => [...prev, { value: selectedTagValue, name: selectedTagName }]);
     }
 
+    function RemoveTag(value: string) {
+        setSelectedTags((prev: Tag[]) => prev.filter(t => t.value !== value));
+    }
 
     return <>
         <Navbar />
@@ -83,6 +121,17 @@ function SnippetForm() {
                         ]}
                         onChange={setLanguage}
                     />
+                    <FormSelectGroup
+                        label="Visibilité :"
+                        name="visibility"
+                        options={[
+                            { value: "", name: "-- Sélectionnez la visibilité --" },
+                            { value: "public", name: "Public" },
+                            { value: "private", name: "Privé" },
+                            { value: "unlisted", name: "Non répertorié" }
+                        ]}
+                        onChange={setVisibility}
+                    />
                     <FormCodeInputGroup label="Code :" name="code" max_length={5000} rows={20} />
                     <FormSelectGroup
                         label="Étiquette :"
@@ -109,12 +158,26 @@ function SnippetForm() {
                     />
                     <div id="tag_container" className="tag_container">
                         {selectedTags.map((tag, index) => (
-                            <SnippetTag key={index} name={tag.name} />
+                            <SnippetTag
+                                key={index}
+                                name={tag.name}
+                                value={tag.value}
+                                onRemove={RemoveTag}
+                            />
                         ))}
-
                     </div>
                 </FormFieldset>
             </FormContainer>
+            {toastMessage && (
+                <Toaster
+                    type={toastMessage.type}
+                    message={toastMessage.message}
+                    position={toastMessage.position}
+                    duration={toastMessage.duration}
+                    onClose={() => setToastMessage(null)}
+                />
+            )}
+
         </main >
         <Footer />
     </>

@@ -4,8 +4,11 @@ import "../main.css"
 import FormContainer from "../components/ui/FormContainer";
 import FormInputGroup from "../components/ui/FormInputGroup";
 import FormSelectGroup from "../components/ui/FormSelectGroup";
+import { useState } from "react";
 
 function SignupForm() {
+    const [selectedGender, setSelectedGender] = useState("");
+
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -16,6 +19,7 @@ function SignupForm() {
 
     function setGender(selectedGender: string) {
         console.log("Genre sélectionné :", selectedGender);
+        setSelectedGender(selectedGender);
     }
 
     return <>
