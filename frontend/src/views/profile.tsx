@@ -59,7 +59,7 @@ function Profile(props: ProfileProps) {
                             )}
                             <div>
                                 <p className="profile_author">{props.username}François</p>
-                                <p className="profile_email">{props.email}francois.popieul@hotmail.fr</p>
+                                <p className="profile_email">{props.email}francois.Popieul@hotmail.fr</p>
                             </div>
                         </div>
                         {userEditMode === false && (
@@ -114,7 +114,7 @@ function Profile(props: ProfileProps) {
                         title="Snippet qui fait des trucs"
                         description="Snippet vraiment très utile"
                         tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieum"
+                        author="François Popieul"
                         authorGender="male"
                         isLiked
                         likeNumber="24"
@@ -127,7 +127,7 @@ function Profile(props: ProfileProps) {
                         title="Snippet qui fait des trucs"
                         description="Snippet vraiment très utile"
                         tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieum"
+                        author="François Popieul"
                         authorGender="male"
                         isLiked
                         likeNumber="24"
@@ -140,7 +140,7 @@ function Profile(props: ProfileProps) {
                         title="Snippet qui fait des trucs"
                         description="Snippet vraiment très utile"
                         tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieum"
+                        author="François Popieul"
                         authorGender="male"
                         isLiked
                         likeNumber="24"
@@ -153,7 +153,7 @@ function Profile(props: ProfileProps) {
                         title="Snippet qui fait des trucs"
                         description="Snippet vraiment très utile"
                         tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieum"
+                        author="François Popieul"
                         authorGender="male"
                         isLiked
                         likeNumber="24"
@@ -166,7 +166,7 @@ function Profile(props: ProfileProps) {
                         title="Snippet qui fait des trucs"
                         description="Snippet vraiment très utile"
                         tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieum"
+                        author="François Popieul"
                         authorGender="male"
                         isLiked
                         likeNumber="24"

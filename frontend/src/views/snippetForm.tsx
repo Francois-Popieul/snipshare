@@ -9,14 +9,10 @@ import FormFieldset from "../components/ui/FormFieldset";
 import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
 import FormCodeInputGroup from "../components/ui/FormCodeInputGroup";
 import { useState } from "react";
-import SnippetTag from "./SnippetTag";
+import SnippetTag from "../components/ui/SnippetTag";
 import Toaster from "../components/ui/Toaster";
-import type { ToastMessage } from "../components/ui/Toaster";
-
-export interface Tag {
-    value: string;
-    name: string;
-}
+import type { ToastMessage } from "../types/toastMessage";
+import type { Tag } from "../types/tag";
 
 function SnippetForm() {
     const [selectedLanguage, setSelectedLanguage] = useState("");
@@ -78,10 +74,22 @@ function SnippetForm() {
         }
 
         setSelectedTags((prev: Tag[]) => [...prev, { value: selectedTagValue, name: selectedTagName }]);
+        showToast(
+            "success",
+            "Étiquette ajoutée.",
+            "top_center",
+            3000
+        );
     }
 
     function RemoveTag(value: string) {
         setSelectedTags((prev: Tag[]) => prev.filter(t => t.value !== value));
+        showToast(
+            "success",
+            "Étiquette supprimée.",
+            "top_center",
+            3000
+        );
     }
 
     return <>
@@ -177,7 +185,6 @@ function SnippetForm() {
                     onClose={() => setToastMessage(null)}
                 />
             )}
-
         </main >
         <Footer />
     </>

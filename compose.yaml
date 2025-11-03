@@ -1,11 +1,11 @@
 services:
   db:
     image: postgres:18-alpine
-    restart: always # Container restarts when necessary
+    restart: always # Le conteneur redémarre dès que nécessaire
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD} # psql user password
-      - POSTGRES_USER=${POSTGRES_USER} # psql user name
-      - POSTGRES_DB=${POSTGRES_DB} # Database name
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD} # Mot de passe user psql
+      - POSTGRES_USER=${POSTGRES_USER} # Nom utilisateur psql
+      - POSTGRES_DB=${POSTGRES_DB} # Nom base de données
 
   adminer:
     image: adminer
@@ -13,17 +13,17 @@ services:
     ports:
       - ${ADMINER_PORT}
     depends_on:
-      # `depends_on` tells Docker to wait until the service is launched
-      # but this doesn't connects services.
+      # `depends_on` indique à Docker d’attendre que le service db soit démarré,
+      # mais cela n’établit pas de connexion entre les services.
       - db
 
   backend:
     restart: always
     build:
-      context: backend # Folder where the Dockerfile is located
+      context: backend # Indique le dossier dans lequel trouver le Dockerfile
     volumes:
-      - ./backend:/app # Binds local an container files
-      - /app/node_modules # Excludes local and container node_modules from binding
+      - ./backend:/app # Bind des fichiers locaux et ceux du conteneur
+      - /app/node_modules # Exclusion du bind des node_modules locaux et ceux du conteneur
     environment:
       - PGUSER=${POSTGRES_USER}
       - PGPASSWORD=${POSTGRES_PASSWORD}
@@ -31,6 +31,7 @@ services:
       - PGDATABASE=${POSTGRES_DB}
       - JWT_SECRET=${BACKEND_JWT_SECRET}
       - JWT_RT_TTL=${BACKEND_JWT_RT_TTL}
+      - CORS_ALLOWED=${BACKEND_CORS_ALLOWED}
     ports:
       - ${BACKEND_PORT}
     depends_on:

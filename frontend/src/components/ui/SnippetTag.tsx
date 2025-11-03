@@ -1,19 +1,20 @@
-import Button from "../components/ui/Button";
+import Button from "./Button";
 
 interface SnippetTagProps {
     name: string;
     value: string;
-    onRemove: (value: string) => void;
+    onRemove?: (value: string) => void;
 }
 
 function SnippetTag(props: SnippetTagProps) {
     function removeTag() {
         event?.preventDefault();
-        props.onRemove(props.value);
+        if (props.onRemove) { props.onRemove(props.value); }
+
     }
     return (
         <Button name={props.name} variant="outline" width="default" type="button" onClick={removeTag}>
-            <span><sup> ×</sup></span>
+            {props.onRemove && <span><sup> ×</sup></span>}
         </Button>
     );
 }

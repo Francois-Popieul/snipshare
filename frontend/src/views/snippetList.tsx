@@ -1,25 +1,51 @@
+import { useEffect } from "react";
 import Footer from "../components/partials/Footer";
 import Navbar from "../components/partials/Navbar";
 import SnippetCard from "../components/ui/SnippetCard";
+import { useApiFetch } from "../hooks/useApiFetch";
+import type { SnippetDetails } from "../types/types";
 
 function SnippetList() {
+
+    const { fetchApi, result, isLoading, isError, errorMsg } = useApiFetch<SnippetDetails[]>();
+
+    useEffect(() => {
+        fetchApi({
+            method: "GET",
+            path: "/snippets",
+        }).catch((error) => {
+            console.error("Erreur lors du fetch :", error);
+        });
+    }, []);
+
+    if (isLoading) return <p>Chargement…</p>;
+    if (isError) return <p>Erreur : {errorMsg}</p>;
+
     return <>
         <Navbar />
         <main>
-            <h1>Page des snippets</h1>
-            <SnippetCard
-                id={1}
-                language="C++"
-                creation_date="10/01/2024"
-                title="Snippet qui fait des trucs"
-                description="Snippet vraiment très utile"
-                tags={["SQL", "JavaScript", "TypeScript"]}
-                author="François Popieum"
-                authorGender="male"
-                isLiked
-                likeNumber="24"
-                commentNumber="10"
-            />
+            <div className="snippets_container">
+                {result && result.data.length > 0 ? (
+                    result.data.map((snippet) => (
+                        <SnippetCard
+                            key={snippet.id_snippet}
+                            id={snippet.id_snippet ? snippet.id_snippet : 0}
+                            language={snippet.language}
+                            creation_date={new Date(snippet.creation_date).toLocaleDateString('fr-FR')}
+                            title={snippet.title}
+                            description={snippet.description}
+                            tags={[]} // À implémenter quand les tags seront disponibles
+                            author={snippet.username} // Nom de l'utilisateur à récupérer autrement
+                            authorGender={snippet.gender}
+                            isLiked={false} // À implémenter avec la table rates
+                            likeNumber="0" // À implémenter avec COUNT sur rates
+                            commentNumber="0" // À implémenter avec COUNT sur comments
+                        />
+                    ))
+                ) : (
+                    <p>Aucun snippet disponible.</p>
+                )}
+            </div>
         </main>
         <Footer />
     </>
