@@ -99,12 +99,6 @@ body {
     justify-content: center;
 }
 
-.profile_user_icon {
-    background-color: var(--color-red-500);
-    border-radius: 50%;
-    margin: 0.5rem;
-}
-
 .profile_author {
     font-size: 1.25rem;
     font-weight: 600;
@@ -180,6 +174,14 @@ body {
 }
 
 /* Snippet Detail Page Classes */
+.snippet_detail_main_container {
+    max-width: 1200px;
+    margin: 1rem auto;
+    border: 2px solid var(--color-slate-300);
+    border-radius: 8px;
+    background-color: var(--color-slate-50);
+    box-sizing: border-box;
+}
 
 .go_back {
     color: var(--color-slate-500);
@@ -219,9 +221,43 @@ body {
     box-sizing: border-box;
 }
 
-.snippet_detail_author_container {}
+.snippet_detail_author_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem;
+}
 
-.snippet_detail_author_icon {}
+.author_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.author_data_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.snippet_detail_author_name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-slate-700);
+    padding: 0;
+    margin: 0;
+}
+
+.snippet_detail_author_email {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-slate-500);
+    padding: 0;
+    margin: 0;
+}
 
 .snippet_detail_code_container {
     display: flex;
@@ -265,6 +301,9 @@ body {
     border-radius: 8px;
     box-sizing: border-box;
     padding: 0.5rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 .snippet_detail_comment_title {

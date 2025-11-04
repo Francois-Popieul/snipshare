@@ -5,26 +5,64 @@ export class SnippetRepository extends Repository {
   async findAll(status: string): Promise<SnippetDetails[] | null> {
     const query = {
       name: "find-public-snippets",
-      text: `SELECT
-            s.id_snippet, s.title, s.description, s.code, s.creation_date, s.visibility,
-            u.id_user, u.username, u.gender, u.mail_address, u.bio,
-            cl.name AS language,
-            t.name AS tag,
-            c.message AS comment,
-            c.creation_date AS comment_date,
-            cu.username AS comment_author
+      text: `SELECT s.id_snippet,
+                    s.title,
+                    s.description,
+                    s.code,
+                    s.creation_date,
+                    s.visibility,
+                json_build_object(
+                    'id', su.id_user,
+                    'username', su.username,
+                    'gender', su.gender,
+                    'mail', su.mail_address
+                  ) AS author,
+                COALESCE(lang.languages, '[]')   AS languages,
+                COALESCE(tg.tags, '[]')          AS tags,
+                COALESCE(rt.raters, '[]')        AS ratings,
+                COALESCE(cm.comments, '[]')      AS comments
+                FROM snippet s
+                JOIN site_user su ON su.id_user = s.user_id
 
-            FROM snippet s
-            JOIN site_user u ON s.user_id = u.id_user
-            LEFT JOIN use us ON s.id_snippet = us.snippet_id
-            LEFT JOIN code_language cl ON us.language_id = cl.id_language
-            LEFT JOIN categorize cat ON s.id_snippet = cat.snippet_id
-            LEFT JOIN tag t ON cat.tag_id = t.id_tag
-            LEFT JOIN comment c ON s.id_snippet = c.snippet_id
-            LEFT JOIN site_user cu ON c.user_id = cu.id_user
+                -- langues
+                LEFT JOIN LATERAL (
+                SELECT json_agg(cl.name ORDER BY cl.name) AS languages
+                FROM utilize u
+                JOIN code_language cl ON cl.id_language = u.language_id
+                WHERE u.snippet_id = s.id_snippet
+                ) lang ON TRUE
 
-            WHERE s.visibility = $1
-            ORDER BY s.id_snippet;`,
+                -- tags
+                LEFT JOIN LATERAL (
+                  SELECT json_agg(t.name ORDER BY t.name) AS tags
+                  FROM categorize c
+                  JOIN tag t ON t.id_tag = c.tag_id
+                  WHERE c.snippet_id = s.id_snippet
+                ) tg ON TRUE
+
+                -- notes
+                LEFT JOIN LATERAL (
+                  SELECT json_agg(json_build_object(
+                          'user_id', r.user_id
+                        )) AS raters
+                  FROM rate r
+                  WHERE r.snippet_id = s.id_snippet
+                ) rt ON TRUE
+
+                -- commentaires
+                LEFT JOIN LATERAL (
+                  SELECT json_agg(json_build_object(
+                          'user_id', c.user_id,
+                          'username', su2.username,
+                          'message', c.message,
+                          'creation_date', c.creation_date
+                        ) ORDER BY c.creation_date) AS comments
+                  FROM criticize c
+                  JOIN site_user su2 ON su2.id_user = c.user_id
+                  WHERE c.snippet_id = s.id_snippet
+                ) cm ON TRUE
+
+                WHERE s.visibility = $1;`,
       values: [status]
     };
 
@@ -43,16 +81,11 @@ export class SnippetRepository extends Repository {
           row.code,
           row.creation_date,
           row.visibility,
-          row.id_user,
-          row.username,
-          row.gender,
-          row.mail_address,
-          row.bio,
-          row.language,
-          row.tag,
-          row.comment,
-          row.comment_date,
-          row.comment_author);
+          row.author,
+          row.languages,
+          row.tags,
+          row.ratings,
+          row.comments);
       });
 
       return snippets;
@@ -66,23 +99,62 @@ export class SnippetRepository extends Repository {
   async findByID(id: string): Promise<SnippetDetails | null> {
     const query = {
       name: "find-snippet",
-      text: `SELECT
-            s.id_snippet, s.title, s.description, s.code, s.creation_date, s.visibility,
-            u.id_user, u.username, u.gender, u.mail_address, u.bio,
-            cl.name AS language,
-            t.name AS tag,
-            c.message AS comment,
-            c.creation_date AS comment_date,
-            cu.username AS comment_author
+      text: `SELECT s.id_snippet,
+                    s.title,
+                    s.description,
+                    s.code,
+                    s.creation_date,
+                    s.visibility,
+                json_build_object(
+                    'id', su.id_user,
+                    'username', su.username,
+                    'gender', su.gender,
+                    'mail', su.mail_address
+                  ) AS author,
+                COALESCE(lang.languages, '[]')   AS languages,
+                COALESCE(tg.tags, '[]')          AS tags,
+                COALESCE(rt.raters, '[]')        AS ratings,
+                COALESCE(cm.comments, '[]')      AS comments
+                FROM snippet s
+                JOIN site_user su ON su.id_user = s.user_id
 
-            FROM snippet s
-            JOIN site_user u ON s.user_id = u.id_user
-            LEFT JOIN use us ON s.id_snippet = us.snippet_id
-            LEFT JOIN code_language cl ON us.language_id = cl.id_language
-            LEFT JOIN categorize cat ON s.id_snippet = cat.snippet_id
-            LEFT JOIN tag t ON cat.tag_id = t.id_tag
-            LEFT JOIN comment c ON s.id_snippet = c.snippet_id
-            LEFT JOIN site_user cu ON c.user_id = cu.id_user
+                -- langues
+                LEFT JOIN LATERAL (
+                SELECT json_agg(cl.name ORDER BY cl.name) AS languages
+                FROM utilize u
+                JOIN code_language cl ON cl.id_language = u.language_id
+                WHERE u.snippet_id = s.id_snippet
+                ) lang ON TRUE
+
+                -- tags
+                LEFT JOIN LATERAL (
+                  SELECT json_agg(t.name ORDER BY t.name) AS tags
+                  FROM categorize c
+                  JOIN tag t ON t.id_tag = c.tag_id
+                  WHERE c.snippet_id = s.id_snippet
+                ) tg ON TRUE
+
+                -- notes
+                LEFT JOIN LATERAL (
+                  SELECT json_agg(json_build_object(
+                          'user_id', r.user_id
+                        )) AS raters
+                  FROM rate r
+                  WHERE r.snippet_id = s.id_snippet
+                ) rt ON TRUE
+
+                -- commentaires
+                LEFT JOIN LATERAL (
+                  SELECT json_agg(json_build_object(
+                          'user_id', c.user_id,
+                          'username', su2.username,
+                          'message', c.message,
+                          'creation_date', c.creation_date
+                        ) ORDER BY c.creation_date) AS comments
+                  FROM criticize c
+                  JOIN site_user su2 ON su2.id_user = c.user_id
+                  WHERE c.snippet_id = s.id_snippet
+                ) cm ON TRUE
 
             WHERE s.id_snippet = $1;`,
       values: [id],
@@ -100,17 +172,11 @@ export class SnippetRepository extends Repository {
         result.rows[0].code,
         result.rows[0].creation_date,
         result.rows[0].visibility,
-        result.rows[0].id_user,
-        result.rows[0].username,
-        result.rows[0].gender,
-        result.rows[0].mail_address,
-        result.rows[0].bio,
-        result.rows[0].language,
-        result.rows[0].tag,
-        result.rows[0].comment,
-        result.rows[0].comment_date,
-        result.rows[0].comment_author);
-
+        result.rows[0].author,
+        result.rows[0].languages,
+        result.rows[0].tags,
+        result.rows[0].ratings,
+        result.rows[0].comments);
 
       return snippet;
     } catch (error) {

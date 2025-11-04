@@ -1,5 +1,24 @@
 import { Language, Tag, Visibility } from "../types/types";
 
+export interface Author {
+    id: number;
+    username: string;
+    gender: string;
+    mail: string;
+    bio: string;
+}
+
+export interface Rating {
+    user_id: number;
+}
+
+export interface Comment {
+    user_id: number;
+    username: string;
+    message: string;
+    creation_date: string;
+}
+
 export class Snippet {
     protected id_snippet: number | null;
     protected title: string;
@@ -22,43 +41,43 @@ export class Snippet {
 }
 
 export class SnippetDetails {
-    protected id_snippet: number | null;
+    protected id_snippet: number;
     protected title: string;
     protected description: string;
     protected code: string;
     protected creation_date: string;
     protected visibility: Visibility;
-    protected id_user: number;
-    protected username: string;
-    protected gender: string;
-    protected mail_address: string;
-    protected bio: string;
-    protected language: string;
-    protected tag: string;
-    protected comment: string;
-    protected comment_date: string;
-    protected comment_author: string;
+    protected author: {
+        id: number,
+        username: string,
+        gender: string,
+        mail: string,
+        bio: string,
+    };
+    protected languages: Language[];
+    protected tags: Tag[];
+    protected ratings: {
+        user_id: number,
+    }[];
+    protected comments: {
+        user_id: number,
+        username: string,
+        message: string,
+        creation_date: string,
+    }[];
 
-
-    constructor(id_snippet: number | null, title: string, description: string,
-        code: string, creation_date: string, visibility: Visibility, id_user: number, username: string, gender: string, mail_address: string, bio: string,
-        language: string, tag: string,
-        comment: string, comment_date: string, comment_author: string) {
+    constructor(id_snippet: number, title: string, description: string,
+        code: string, creation_date: string, visibility: Visibility, author: Author, languages: Language[], tags: Tag[], ratings: Rating[], comments: Comment[]) {
         this.id_snippet = id_snippet;
         this.title = title;
         this.description = description;
         this.code = code;
         this.creation_date = creation_date;
         this.visibility = visibility;
-        this.id_user = id_user;
-        this.username = username;
-        this.gender = gender;
-        this.mail_address = mail_address;
-        this.bio = bio;
-        this.language = language;
-        this.tag = tag;
-        this.comment = comment;
-        this.comment_date = comment_date;
-        this.comment_author = comment_author;
+        this.author = author;
+        this.languages = languages;
+        this.tags = tags;
+        this.ratings = ratings;
+        this.comments = comments;
     }
 }

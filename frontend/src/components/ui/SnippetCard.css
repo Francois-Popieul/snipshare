@@ -11,6 +11,11 @@
     border: solid 2px var(--color-slate-300);
     border-radius: 10px;
     background-color: var(--color-slate-50);
+    box-shadow: 4px 4px var(--color-slate-500);
+
+    &:hover {
+        scale: 1.1;
+    }
 }
 
 .row_flex_container {
@@ -59,12 +64,16 @@
     font-weight: 600;
     margin: 0.25rem;
     padding: 0;
+    height: 2rem;
+    text-overflow: ellipsis;
 }
 
 .snippet_description {
     font-size: 1rem;
     margin: 0.25rem;
     padding: 0;
+    height: 2rem;
+    text-overflow: ellipsis;
 }
 
 .separator {

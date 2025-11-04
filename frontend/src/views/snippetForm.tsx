@@ -176,6 +176,7 @@ function SnippetForm() {
                     </div>
                 </FormFieldset>
             </FormContainer>
+
             {toastMessage && (
                 <Toaster
                     type={toastMessage.type}
@@ -185,6 +186,7 @@ function SnippetForm() {
                     onClose={() => setToastMessage(null)}
                 />
             )}
+            
         </main >
         <Footer />
     </>

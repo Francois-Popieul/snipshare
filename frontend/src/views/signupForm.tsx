@@ -5,16 +5,36 @@ import FormContainer from "../components/ui/FormContainer";
 import FormInputGroup from "../components/ui/FormInputGroup";
 import FormSelectGroup from "../components/ui/FormSelectGroup";
 import { useState } from "react";
+import type { ToastMessage } from "../types/toastMessage";
+import Toaster from "../components/ui/Toaster";
 
 function SignupForm() {
     const [selectedGender, setSelectedGender] = useState("");
+    const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
+
+    function showToast(
+        type: ToastMessage["type"],
+        message: string,
+        position: ToastMessage["position"],
+        duration: number
+    ) {
+        setToastMessage({ type, message, position, duration });
+    }
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
+        if (data.password != data.password_confirmation) {
+            showToast(
+                "error",
+                "Les mots de passe ne concordent pas.",
+                "top_center",
+                3000
+            );
+            return;
+        }
         console.log("Données du formulaire :", data);
-
     }
 
     function setGender(selectedGender: string) {
@@ -35,7 +55,7 @@ function SignupForm() {
                     link_destination: "/login",
                     link_text: "Connectez-vous."
                 }}>
-                <FormInputGroup label="Nom complet :" name="fullname" type="text" />
+                <FormInputGroup label="Nom complet :" name="fullname" type="text" placeholder="Jean Dupont" />
                 <FormSelectGroup
                     label="Genre :"
                     name="gender"
@@ -47,10 +67,21 @@ function SignupForm() {
                     ]}
                     onChange={setGender}
                 />
-                <FormInputGroup label="Adresse e-mail :" name="email" type="email" />
-                <FormInputGroup label="Mot de passe :" name="password" type="password" />
-                <FormInputGroup label="Confirmer le mot de passe :" name="password_confirmation" type="password" />
+                <FormInputGroup label="Adresse e-mail :" name="email" type="email" placeholder="jean.dupont@ara.gouv.fr" />
+                <FormInputGroup label="Mot de passe :" name="password" type="password" placeholder="***********" />
+                <FormInputGroup label="Confirmer le mot de passe :" name="password_confirmation" type="password" placeholder="***********" />
             </FormContainer>
+
+            {toastMessage && (
+                <Toaster
+                    type={toastMessage.type}
+                    message={toastMessage.message}
+                    position={toastMessage.position}
+                    duration={toastMessage.duration}
+                    onClose={() => setToastMessage(null)}
+                />
+            )}
+
         </main>
         <Footer />
     </>

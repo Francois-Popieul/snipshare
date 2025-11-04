@@ -213,7 +213,7 @@ VALUES (
         'male',
         'denis.ritchie@ara.gouv.fr',
         'securePass123',
-        '.'
+        ''
     ),
     (
         'Ada Lovelace',
@@ -316,7 +316,7 @@ VALUES (
 
 -- Associer des langages
 INSERT INTO
-    use (snippet_id, language_id)
+    utilize (snippet_id, language_id)
 VALUES (1, 35), -- Python
     (2, 22), -- JavaScript
     (3, 44), -- SQL
@@ -334,11 +334,14 @@ INSERT INTO
     categorize (snippet_id, tag_id)
 VALUES (1, 47), -- Fonction
     (2, 19), -- Boucle
+    (2, 47), -- Fonction
     (3, 13), -- Base de données
     (4, 77), -- Récursivité
+    (4, 47), -- Fonction
     (5, 53), -- HTML
     (6, 32), -- CSS
     (7, 76), -- Tri
+    (7, 47), -- Fonction
     (8, 4), -- API
     (9, 42), -- Expression régulière (Regex)
     (10, 93);
@@ -346,7 +349,7 @@ VALUES (1, 47), -- Fonction
 
 -- Associer des commentaires
 INSERT INTO
-    comment (
+    criticize (
         snippet_id,
         user_id,
         message,
@@ -404,6 +407,18 @@ VALUES (
         9,
         2,
         'Le motif regex est très utile.',
+        '2025-11-02'
+    ),
+    (
+        9,
+        1,
+        'Cette expression régulière envoie du steak.',
+        '2025-11-02'
+    ),
+    (
+        10,
+        2,
+        'Ouah, vraiment trop utile. Je m’en sers tous les jours',
         '2025-11-02'
     ),
     (

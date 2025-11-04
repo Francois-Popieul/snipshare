@@ -8,11 +8,11 @@ import SnippetTag from "../components/ui/SnippetTag";
 import type { ToastMessage } from "../types/toastMessage";
 import { useEffect, useState } from "react";
 import Toaster from "../components/ui/Toaster";
-import { FcBusinessman, FcBusinesswoman } from "react-icons/fc";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { MdOutlineModeComment } from "react-icons/md";
 import { useApiFetch } from "../hooks/useApiFetch";
 import type { SnippetDetails } from "../types/types";
+import UserGenderIcon from "../components/ui/UserGenderIcon";
 
 function SnippetDetailView() {
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
@@ -81,37 +81,41 @@ function SnippetDetailView() {
     return <>
         <Navbar />
         <main>
-            <Link to="/snippets" className="simple_link"><p className="go_back"><MdOutlineArrowBack size={24} /> Revenir aux snippets</p></Link>
-            <p className="snippet_detail_language">{result.data.language}</p>
-            <h1 className="snippet_detail_title">{result.data.title}</h1>
-            <p className="snippet_detail_description">{result.data.description}</p>
-            <div className="snippet_detail_tag_container">
-                <SnippetTag name={result.data.language} value={result.data.language} />
-            </div>
-            <hr className="separator" />
-            <div className="snippet_detail_author_container">
-                <div className="snippet_detail_author_icon">
-                    <div className="">
-                        <div className="">
-                            <FcBusinesswoman size={48} className="" />
-                            <div>
-                                <p className="">{result.data.username}</p>
-                                <p className="">{result.data.mail_address}</p>
-                            </div>
+            <div className="snippet_detail_main_container">
+                <Link to="/snippets" className="simple_link"><p className="go_back"><MdOutlineArrowBack size={24} /> Revenir aux snippets</p></Link>
+                <p className="snippet_detail_language">{result.data.language}</p>
+                <h1 className="snippet_detail_title">{result.data.title}</h1>
+                <p className="snippet_detail_description">{result.data.description}</p>
+                <div className="snippet_detail_tag_container">
+                    <SnippetTag name={result.data.language} value={result.data.language} />
+                </div>
+                <hr className="separator" />
+                <div className="snippet_detail_author_container">
+                    <div className="author_container">
+                        <UserGenderIcon gender={result.data.gender} size={48} />
+                        <div className="author_data_container">
+                            <p className="snippet_detail_author_name">{result.data.username}</p>
+                            <p className="snippet_detail_author_email">{result.data.mail_address}</p>
                         </div>
                     </div>
+                    <div>Créé le {new Date(result.data.creation_date).toLocaleDateString("fr-FR")}</div>
                 </div>
-            </div>
-            <hr className="separator" />
-            <div className="snippet_detail_code_container">
-                <div className="snippet_detail_code_top_container">
-                    <p className="snippet_detail_code_title">Code</p>
-                    <Button name="Copier" variant="outline" type="button" width="medium" onClick={Copy} />
+                <hr className="separator" />
+                <div className="snippet_detail_code_container">
+                    <div className="snippet_detail_code_top_container">
+                        <p className="snippet_detail_code_title">Code</p>
+                        <Button name="Copier" variant="outline" type="button" width="medium" onClick={Copy} />
+                    </div>
+                    <pre className="snippet_detail_code_text"><code id="snippet_code">{result.data.code}</code></pre>
                 </div>
-                <pre className="snippet_detail_code_text"><code id="snippet_code">{result.data.code}</code></pre>
+                <h2 className="snippet_detail_comment_title">Commentaires</h2>
+                <div className="snippet_detail_comment_container">
+                    <p>
+                        <i>« {result.data.comment} »</i>, {result.data.comment_author}, le {new Date(result.data.comment_date).toLocaleDateString("fr-FR")}
+                    </p>
+                </div>
+
             </div>
-            <h2 className="snippet_detail_comment_title">Commentaires</h2>
-            <div className="snippet_detail_comment_container">{result.data.comment}</div>
             {toastMessage && (
                 <Toaster
                     type={toastMessage.type}
@@ -121,6 +125,7 @@ function SnippetDetailView() {
                     onClose={() => setToastMessage(null)}
                 />
             )}
+
         </main >
         <Footer />
     </>

@@ -1,4 +1,3 @@
-import { FcBusinessman, FcBusinesswoman } from "react-icons/fc";
 import Footer from "../components/partials/Footer";
 import Navbar from "../components/partials/Navbar";
 import FormInputGroup from "../components/ui/FormInputGroup";
@@ -9,6 +8,7 @@ import { useState } from "react";
 import SnippetCard from "../components/ui/SnippetCard";
 import { useIsMobile } from "../hooks/useMobile";
 import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
+import UserGenderIcon from "../components/ui/UserGenderIcon";
 
 interface ProfileProps {
     id: number;
@@ -52,11 +52,7 @@ function Profile(props: ProfileProps) {
                 <div className="profile_main_container">
                     <div className="profile_top_container">
                         <div className="user_details">
-                            {props.gender === "male" ? (
-                                <FcBusinessman size={48} className="profile_user_icon" />
-                            ) : (
-                                <FcBusinesswoman size={48} className="profile_user_icon" />
-                            )}
+                            <UserGenderIcon gender={props.gender} size={48} />
                             <div>
                                 <p className="profile_author">{props.username}François</p>
                                 <p className="profile_email">{props.email}francois.Popieul@hotmail.fr</p>

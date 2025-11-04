@@ -25,8 +25,8 @@ function LoginForm() {
                     link_destination: "/signup",
                     link_text: "Créez-en un."
                 }}>
-                <FormInputGroup label="Adresse e-mail :" name="email" type="email" />
-                <FormInputGroup label="Mot de passe :" name="password" type="password" />
+                <FormInputGroup label="Adresse e-mail :" name="email" type="email" placeholder="jean.dupont@ara.gouv.fr" />
+                <FormInputGroup label="Mot de passe :" name="password" type="password" placeholder="**********" />
             </FormContainer>
         </main>
         <Footer />

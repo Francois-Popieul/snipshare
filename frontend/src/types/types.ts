@@ -27,22 +27,30 @@ export type Snippet = {
 }
 
 export type SnippetDetails = {
-    id_snippet: number | null;
+    id_snippet: number;
     title: string;
     description: string;
     code: string;
     creation_date: string;
     visibility: Visibility;
-    id_user: number;
-    username: string;
-    gender: string;
-    mail_address: string;
-    bio: string;
-    language: string;
-    tag: string;
-    comment: string;
-    comment_date: string;
-    comment_author: string;
+    author: {
+        id: number,
+        username: string,
+        gender: string,
+        mail: string,
+        bio: string,
+    };
+    languages: Language[];
+    tags: Tag[];
+    ratings: {
+        user_id: number,
+    }[];
+    comments: {
+        user_id: number,
+        username: string,
+        message: string,
+        creation_date: string,
+    }[];
 }
 
 export type Language = {

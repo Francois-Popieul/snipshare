@@ -30,13 +30,13 @@ function SnippetList() {
                         <SnippetCard
                             key={snippet.id_snippet}
                             id={snippet.id_snippet ? snippet.id_snippet : 0}
-                            language={snippet.language}
+                            language={snippet.languages[0]}
                             creation_date={new Date(snippet.creation_date).toLocaleDateString('fr-FR')}
                             title={snippet.title}
                             description={snippet.description}
                             tags={[]} // À implémenter quand les tags seront disponibles
-                            author={snippet.username} // Nom de l'utilisateur à récupérer autrement
-                            authorGender={snippet.gender}
+                            author={snippet.author.username} // Nom de l'utilisateur à récupérer autrement
+                            authorGender={snippet.author.gender}
                             isLiked={false} // À implémenter avec la table rates
                             likeNumber="0" // À implémenter avec COUNT sur rates
                             commentNumber="0" // À implémenter avec COUNT sur comments

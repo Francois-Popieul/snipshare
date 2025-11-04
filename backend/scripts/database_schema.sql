@@ -18,6 +18,7 @@ CREATE TABLE token (
     id_token SERIAL,
     token_value VARCHAR(200) NOT NULL,
     creation_date DATE NOT NULL,
+    expiry_date DATE NOT NULL,
     id_user INTEGER NOT NULL,
     PRIMARY KEY (id_token),
     FOREIGN KEY (id_user) REFERENCES site_user (id_user)
@@ -41,7 +42,7 @@ CREATE TABLE snippet (
     FOREIGN KEY (user_id) REFERENCES site_user (id_user)
 );
 
-CREATE TABLE use (
+CREATE TABLE utilize (
     snippet_id INTEGER,
     language_id INTEGER,
     PRIMARY KEY (snippet_id, language_id),
@@ -65,7 +66,7 @@ CREATE TABLE rate (
     FOREIGN KEY (user_id) REFERENCES site_user (id_user)
 );
 
-CREATE TABLE comment (
+CREATE TABLE criticize (
     snippet_id INTEGER,
     user_id INTEGER,
     message VARCHAR(1000) NOT NULL,

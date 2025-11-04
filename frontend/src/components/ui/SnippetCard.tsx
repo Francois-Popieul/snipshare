@@ -1,8 +1,8 @@
 import { IoMdHeartEmpty } from "react-icons/io";
 import { MdOutlineModeComment } from "react-icons/md";
-import { FcBusinessman, FcBusinesswoman } from "react-icons/fc";
 import "./SnippetCard.css";
 import { Link } from "react-router";
+import UserGenderIcon from "./UserGenderIcon";
 
 interface SnippetCardProps {
     id: number;
@@ -35,11 +35,7 @@ function SnippetCard(props: SnippetCardProps) {
                 <hr className="separator" />
                 <div className="row_flex_container">
                     <div className="author_flex_container">
-                        {props.authorGender === "male" ? (
-                            <FcBusinessman size={36} className="author_icon" />
-                        ) : (
-                            <FcBusinesswoman size={36} className="author_icon" />
-                        )}
+                        <UserGenderIcon gender={props.authorGender} size={36} />
                         <p className="author">{props.author}</p>
                     </div>
 
