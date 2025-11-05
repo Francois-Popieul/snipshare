@@ -40,8 +40,8 @@ export type SnippetDetails = {
         mail: string,
         bio: string,
     };
-    languages: Language[];
-    tags: Tag[];
+    languages: string[];
+    tags: string[];
     ratings: {
         user_id: number,
     }[];

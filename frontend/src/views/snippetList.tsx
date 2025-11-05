@@ -29,17 +29,17 @@ function SnippetList() {
                     result.data.map((snippet) => (
                         <SnippetCard
                             key={snippet.id_snippet}
-                            id={snippet.id_snippet ? snippet.id_snippet : 0}
-                            language={snippet.languages[0]}
+                            id={snippet.id_snippet}
+                            languages={snippet.languages}
                             creation_date={new Date(snippet.creation_date).toLocaleDateString('fr-FR')}
                             title={snippet.title}
                             description={snippet.description}
-                            tags={[]} // À implémenter quand les tags seront disponibles
+                            tags={snippet.tags} // À implémenter quand les tags seront disponibles
                             author={snippet.author.username} // Nom de l'utilisateur à récupérer autrement
                             authorGender={snippet.author.gender}
                             isLiked={false} // À implémenter avec la table rates
-                            likeNumber="0" // À implémenter avec COUNT sur rates
-                            commentNumber="0" // À implémenter avec COUNT sur comments
+                            likeNumber={snippet.ratings.length} // À implémenter avec COUNT sur rates
+                            commentNumber={snippet.comments.length} // À implémenter avec COUNT sur comments
                         />
                     ))
                 ) : (

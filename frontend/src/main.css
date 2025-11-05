@@ -174,8 +174,17 @@ body {
 }
 
 /* Snippet Detail Page Classes */
-.snippet_detail_main_container {
-    max-width: 1200px;
+.mobile_snippet_detail_main_container {
+    max-width: 95%;
+    margin: 1rem auto;
+    border: 2px solid var(--color-slate-300);
+    border-radius: 8px;
+    background-color: var(--color-slate-50);
+    box-sizing: border-box;
+}
+
+.desktop_snippet_detail_main_container {
+    max-width: 75%;
     margin: 1rem auto;
     border: 2px solid var(--color-slate-300);
     border-radius: 8px;
@@ -234,6 +243,34 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.row_flex_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+}
+
+.like_flex_container,
+.comment_flex_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+}
+
+.like_flex_container,
+.comment_flex_container {
+    gap: 0.25rem;
 }
 
 .author_data_container {

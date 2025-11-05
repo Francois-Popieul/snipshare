@@ -13,8 +13,10 @@ import { MdOutlineModeComment } from "react-icons/md";
 import { useApiFetch } from "../hooks/useApiFetch";
 import type { SnippetDetails } from "../types/types";
 import UserGenderIcon from "../components/ui/UserGenderIcon";
+import { useIsMobile } from "../hooks/useMobile";
 
 function SnippetDetailView() {
+    const isMobile = useIsMobile();
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
 
     function showToast(
@@ -81,24 +83,35 @@ function SnippetDetailView() {
     return <>
         <Navbar />
         <main>
-            <div className="snippet_detail_main_container">
+            <div className={isMobile ? "mobile_snippet_detail_main_container" : "desktop_snippet_detail_main_container"}>
                 <Link to="/snippets" className="simple_link"><p className="go_back"><MdOutlineArrowBack size={24} /> Revenir aux snippets</p></Link>
-                <p className="snippet_detail_language">{result.data.language}</p>
+                <p className="snippet_detail_language">{result.data.languages[0]}</p>
                 <h1 className="snippet_detail_title">{result.data.title}</h1>
                 <p className="snippet_detail_description">{result.data.description}</p>
                 <div className="snippet_detail_tag_container">
-                    <SnippetTag name={result.data.language} value={result.data.language} />
+                    {result.data.tags.map((tag) => (
+                        <SnippetTag name={tag} value={tag} />))}
                 </div>
                 <hr className="separator" />
                 <div className="snippet_detail_author_container">
                     <div className="author_container">
-                        <UserGenderIcon gender={result.data.gender} size={48} />
+                        <UserGenderIcon gender={result.data.author.gender} size={48} />
                         <div className="author_data_container">
-                            <p className="snippet_detail_author_name">{result.data.username}</p>
-                            <p className="snippet_detail_author_email">{result.data.mail_address}</p>
+                            <p className="snippet_detail_author_name">{result.data.author.username}</p>
+                            <p className="snippet_detail_author_email">{result.data.author.mail}</p>
                         </div>
                     </div>
-                    <div>Créé le {new Date(result.data.creation_date).toLocaleDateString("fr-FR")}</div>
+                    <p>Créé le {new Date(result.data.creation_date).toLocaleDateString("fr-FR")}</p>
+                    <div className="row_flex_container">
+                        <div className="like_flex_container">
+                            <IoMdHeartEmpty size={24} />
+                            <p>{result.data.ratings.length}</p>
+                        </div>
+                        <div className="comment_flex_container">
+                            <MdOutlineModeComment size={24} />
+                            <p>{result.data.comments.length}</p>
+                        </div>
+                    </div>
                 </div>
                 <hr className="separator" />
                 <div className="snippet_detail_code_container">
@@ -110,9 +123,11 @@ function SnippetDetailView() {
                 </div>
                 <h2 className="snippet_detail_comment_title">Commentaires</h2>
                 <div className="snippet_detail_comment_container">
-                    <p>
-                        <i>« {result.data.comment} »</i>, {result.data.comment_author}, le {new Date(result.data.comment_date).toLocaleDateString("fr-FR")}
-                    </p>
+                    {result.data.comments.map((comment) => (
+                        <p>
+                            <i>« {comment.message} »</i>, {comment.username}, le {new Date(comment.creation_date).toLocaleDateString("fr-FR")}
+                        </p>))}
+
                 </div>
 
             </div>

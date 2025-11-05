@@ -105,68 +105,16 @@ function Profile(props: ProfileProps) {
                 <div className="profile_snippet_list">
                     <SnippetCard
                         id={1}
-                        language="C++"
+                        languages={["C++"]}
                         creation_date="10/01/2024"
                         title="Snippet qui fait des trucs"
                         description="Snippet vraiment très utile"
                         tags={["SQL", "JavaScript", "TypeScript"]}
                         author="François Popieul"
                         authorGender="male"
-                        isLiked
-                        likeNumber="24"
-                        commentNumber="10"
-                    />
-                    <SnippetCard
-                        id={1}
-                        language="C++"
-                        creation_date="10/01/2024"
-                        title="Snippet qui fait des trucs"
-                        description="Snippet vraiment très utile"
-                        tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieul"
-                        authorGender="male"
-                        isLiked
-                        likeNumber="24"
-                        commentNumber="10"
-                    />
-                    <SnippetCard
-                        id={1}
-                        language="C++"
-                        creation_date="10/01/2024"
-                        title="Snippet qui fait des trucs"
-                        description="Snippet vraiment très utile"
-                        tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieul"
-                        authorGender="male"
-                        isLiked
-                        likeNumber="24"
-                        commentNumber="10"
-                    />
-                    <SnippetCard
-                        id={1}
-                        language="C++"
-                        creation_date="10/01/2024"
-                        title="Snippet qui fait des trucs"
-                        description="Snippet vraiment très utile"
-                        tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieul"
-                        authorGender="male"
-                        isLiked
-                        likeNumber="24"
-                        commentNumber="10"
-                    />
-                    <SnippetCard
-                        id={1}
-                        language="C++"
-                        creation_date="10/01/2024"
-                        title="Snippet qui fait des trucs"
-                        description="Snippet vraiment très utile"
-                        tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieul"
-                        authorGender="male"
-                        isLiked
-                        likeNumber="24"
-                        commentNumber="10"
+                        isLiked={true}
+                        likeNumber={24}
+                        commentNumber={10}
                     />
                 </div>
             </div>

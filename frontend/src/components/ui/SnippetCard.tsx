@@ -6,7 +6,7 @@ import UserGenderIcon from "./UserGenderIcon";
 
 interface SnippetCardProps {
     id: number;
-    language: string;
+    languages: string[];
     creation_date: string;
     title: string;
     description: string;
@@ -14,8 +14,8 @@ interface SnippetCardProps {
     author: string;
     authorGender: string;
     isLiked: boolean;
-    likeNumber: string;
-    commentNumber: string;
+    likeNumber: number;
+    commentNumber: number;
 }
 
 function SnippetCard(props: SnippetCardProps) {
@@ -23,7 +23,10 @@ function SnippetCard(props: SnippetCardProps) {
         <Link to={`/snippets/${props.id}`} className="simple_link">
             <div className="column_flex_container">
                 <div className="row_flex_container">
-                    <p className="language_box">{props.language}</p>
+                    <div className="tag_flex_container">
+                        {props.languages.map((language) => (
+                            <p className="language_box">{language}</p>))}
+                    </div>
                     <p>{props.creation_date}</p>
                 </div>
                 <p className="snippet_title">{props.title}</p>

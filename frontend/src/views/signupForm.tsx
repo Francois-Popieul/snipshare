@@ -7,10 +7,17 @@ import FormSelectGroup from "../components/ui/FormSelectGroup";
 import { useState } from "react";
 import type { ToastMessage } from "../types/toastMessage";
 import Toaster from "../components/ui/Toaster";
+import { useApiFetch } from "../hooks/useApiFetch";
+import type { User } from "../types/types";
+import { useNavigate } from "react-router";
+
 
 function SignupForm() {
+    const navigate = useNavigate();
     const [selectedGender, setSelectedGender] = useState("");
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
+    const { fetchApi } = useApiFetch<User>();
+
 
     function showToast(
         type: ToastMessage["type"],
@@ -21,11 +28,13 @@ function SignupForm() {
         setToastMessage({ type, message, position, duration });
     }
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
-        if (data.password != data.password_confirmation) {
+        console.log(data);
+
+        if (data.password !== data.password_confirmation) {
             showToast(
                 "error",
                 "Les mots de passe ne concordent pas.",
@@ -34,7 +43,27 @@ function SignupForm() {
             );
             return;
         }
-        console.log("Données du formulaire :", data);
+
+        try {
+            // Appel direct à fetchApi (useApiFetch expose fetchApi)
+            const json = await fetchApi({
+                method: "POST",
+                path: "/auth/signup",
+                body: data,
+                credentials: "include",
+            });
+
+            // fetchApi lève une erreur si response.ok === false, donc ici c'est un succès
+            showToast("success", json.message || "Inscription réussie.", "top_center", 3000);
+
+            // Redirection vers la page de connexion après 1 seconde
+            setTimeout(() => {
+                navigate("/login");
+            }, 1000);
+        } catch (error) {
+            const msg = error instanceof Error ? error.message : String(error);
+            showToast("error", msg || "Erreur lors de l'inscription.", "top_center", 4000);
+        }
     }
 
     function setGender(selectedGender: string) {
