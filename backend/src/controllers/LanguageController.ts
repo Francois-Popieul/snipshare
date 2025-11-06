@@ -1,8 +1,8 @@
 import { Controller } from "../libs/Controller";
 import { LanguageRepository } from "../repositories/LanguageRepository";
 
-export class SnippetController extends Controller {
-    browse = async () => {
+export class LanguageController extends Controller {
+    async browse() {
         const languageRepository = new LanguageRepository();
         try {
             const languages = await languageRepository.findAll();

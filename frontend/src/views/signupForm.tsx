@@ -8,15 +8,16 @@ import { useState } from "react";
 import type { ToastMessage } from "../types/toastMessage";
 import Toaster from "../components/ui/Toaster";
 import { useApiFetch } from "../hooks/useApiFetch";
-import type { User } from "../types/types";
 import { useNavigate } from "react-router";
+// import useAuth from "../hooks/useAuth";
 
 
 function SignupForm() {
     const navigate = useNavigate();
     const [selectedGender, setSelectedGender] = useState("");
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
-    const { fetchApi } = useApiFetch<User>();
+    const { fetchApi } = useApiFetch<number>();
+    // const { userID, login } = useAuth();
 
 
     function showToast(
@@ -55,6 +56,8 @@ function SignupForm() {
 
             // fetchApi lève une erreur si response.ok === false, donc ici c'est un succès
             showToast("success", json.message || "Inscription réussie.", "top_center", 3000);
+            // login(json.data);
+            // console.log("Utilisateur connecté : " + userID);
 
             // Redirection vers la page de connexion après 1 seconde
             setTimeout(() => {

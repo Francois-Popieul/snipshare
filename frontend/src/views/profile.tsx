@@ -4,26 +4,22 @@ import FormInputGroup from "../components/ui/FormInputGroup";
 import FormSelectGroup from "../components/ui/FormSelectGroup";
 import Button from "../components/ui/Button";
 import "../main.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SnippetCard from "../components/ui/SnippetCard";
 import { useIsMobile } from "../hooks/useMobile";
 import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
 import UserGenderIcon from "../components/ui/UserGenderIcon";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router";
+import { useApiFetch } from "../hooks/useApiFetch";
+import type { User } from "../types/types";
 
-interface ProfileProps {
-    id: number;
-    username: string;
-    email: string;
-    gender: string;
-    bio: string;
-    createdSnippets: [];
-    likedSnippets: [];
-}
-
-function Profile(props: ProfileProps) {
+function Profile() {
+    const navigate = useNavigate();
     const isMobile = useIsMobile();
     const [userEditMode, setUserEditMode] = useState(false);
     const [snippetToggler, setSnippetToggler] = useState(false);
+    const { userID } = useAuth();
 
     function toggleUserEdit() {
         setUserEditMode(prev => !prev);
@@ -45,6 +41,24 @@ function Profile(props: ProfileProps) {
         console.log("Genre sélectionné :", selectedGenderName);
     }
 
+    if (userID === null) {
+        navigate("/");
+    }
+
+    const { fetchApi, result, isLoading, isError, errorMsg } = useApiFetch<User>();
+
+    useEffect(() => {
+        fetchApi({
+            method: "GET",
+            path: `/user/${userID}`,
+        }).catch((error) => {
+            console.error("Erreur lors du fetch :", error);
+        });
+    }, []);
+
+    if (isLoading) return <p>Chargement…</p>;
+    if (isError) return <p>Erreur : {errorMsg}</p>;
+
     return <>
         <Navbar />
         <main>
@@ -52,10 +66,10 @@ function Profile(props: ProfileProps) {
                 <div className="profile_main_container">
                     <div className="profile_top_container">
                         <div className="user_details">
-                            <UserGenderIcon gender={props.gender} size={48} />
+                            <UserGenderIcon gender="male" size={48} />
                             <div>
-                                <p className="profile_author">{props.username}François</p>
-                                <p className="profile_email">{props.email}francois.Popieul@hotmail.fr</p>
+                                <p className="profile_author">François</p>
+                                <p className="profile_email">francois.Popieul@hotmail.fr</p>
                             </div>
                         </div>
                         {userEditMode === false && (
@@ -68,7 +82,7 @@ function Profile(props: ProfileProps) {
                             />
                         )}
                     </div>
-                    {props.bio ? <div className="biography">{props.bio}</div> : <div className="biography">Aucune information saisie à votre sujet. Cliquez sur <strong>Modifier</strong> pour ajouter votre biographie.</div>}
+                    {userID ? <div className="biography">blabla</div> : <div className="biography">Aucune information saisie à votre sujet. Cliquez sur <strong>Modifier</strong> pour ajouter votre biographie.</div>}
                 </div>
 
                 {userEditMode === true && (

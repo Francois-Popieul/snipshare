@@ -74,6 +74,7 @@ export class AuthController extends Controller {
 
         return this.response.status(200).json({
             message: "Inscription validée.",
+            data: newUser.id_user,
         });
     };
 
@@ -90,6 +91,7 @@ export class AuthController extends Controller {
             if (validPassword) {
                 return this.response.status(200).json({
                     message: "Connexion réussie.",
+                    data: existingUser.id_user,
                 })
             }
         }

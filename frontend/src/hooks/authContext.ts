@@ -1,9 +1,8 @@
 import { createContext } from 'react';
-import type { User } from '../types/types';
 
 export type AuthContextType = {
-    user: User | null;
-    login: (userData: User) => void;
+    userID: number | null;
+    login: (userID: number) => void;
     logout: () => void;
 };
 

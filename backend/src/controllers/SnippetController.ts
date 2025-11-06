@@ -2,7 +2,7 @@ import { Controller } from "../libs/Controller";
 import { SnippetRepository } from "../repositories/SnippetRepository";
 
 export class SnippetController extends Controller {
-    browsePublic = async () => {
+    async browsePublic() {
         const snippetRepository = new SnippetRepository();
         try {
             const snippets = await snippetRepository.findAll("public");
@@ -21,7 +21,7 @@ export class SnippetController extends Controller {
         }
     };
 
-    browseById = async () => {
+    async browseById() {
         const snippetRepository = new SnippetRepository();
         const snippetId = this.request.params.id;
         console.log("Id du snippet : " + snippetId);

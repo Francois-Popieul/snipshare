@@ -5,10 +5,12 @@ import BrandName from "../ui/BrandName";
 import { Link } from "react-router";
 import { useIsMobile } from "../../hooks/useMobile";
 import BurgerMenu from "../ui/BurgerMenu";
+import useAuth from "../../hooks/useAuth";
 
 
 function Navbar() {
-    const isMobile = useIsMobile()
+    const isMobile = useIsMobile();
+    const { userID, logout } = useAuth();
 
     return <>
         <div className="row_flex_container">
@@ -22,10 +24,15 @@ function Navbar() {
                 <Link to={"/"}><Button name="Snippets populaires" width="large" variant="outline" /></Link>
             </div>
 
-                <div className="row_flex_container">
+                {userID && (<div className="row_flex_container">
+                    <Link to={"/snippets/creation"}><Button name="Créer un snippet" width="medium" variant="outline" /></Link>
+                    {/* <Link to={"/profile"}><Button name="Profil" width="medium" variant="plain" /></Link> */}
+                    <><BurgerMenu /></>
+                </div>)}
+                {!userID && (<div className="row_flex_container">
                     <Link to={"/login"}><Button name="Connexion" width="medium" variant="outline" /></Link>
                     <Link to={"/signup"}><Button name="Inscription" width="medium" variant="plain" /></Link>
-                </div></>)}
+                </div>)}</>)}
         </div>
     </>
 }

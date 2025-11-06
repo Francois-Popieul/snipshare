@@ -1,25 +1,23 @@
-import React, { useState } from "react";
-import type { ReactNode } from "react";
+import React, { useState, type ReactNode } from "react";
 import AuthContext from "./authContext";
-import type { User } from "../types/types";
 
 type AuthProviderProps = {
     children: ReactNode;
 };
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [userID, setUserID] = useState<number | null>(null);
 
-    function login(userData: User) {
-        setUser(userData);
+    function login(userID: number) {
+        setUserID(userID);
     };
 
     function logout() {
-        setUser(null);
+        setUserID(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ userID, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

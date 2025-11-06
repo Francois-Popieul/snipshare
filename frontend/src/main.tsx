@@ -8,11 +8,11 @@ import Profile from "./views/profile";
 import SignupForm from "./views/signupForm";
 import LoginForm from "./views/loginForm";
 import SnippetForm from "./views/snippetForm";
-import AuthContext from "./hooks/authContext";
+import AuthProvider from "./hooks/authProvider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthContext.Provider value={null}>
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Homepage />} />
@@ -24,6 +24,6 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/login" element={<LoginForm />} />
         </Routes>
       </BrowserRouter>
-    </AuthContext.Provider>
+    </AuthProvider>
   </StrictMode>
 );

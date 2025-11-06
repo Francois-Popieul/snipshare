@@ -8,11 +8,13 @@ import type { ToastMessage } from "../types/toastMessage";
 import { useApiFetch } from "../hooks/useApiFetch";
 import type { User } from "../types/types";
 import Toaster from "../components/ui/Toaster";
+import useAuth from "../hooks/useAuth";
 
 function LoginForm() {
     const navigate = useNavigate();
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
-    const { fetchApi } = useApiFetch<User>();
+    const { fetchApi } = useApiFetch<number>();
+    const { userID, login } = useAuth();
 
     function showToast(
         type: ToastMessage["type"],
@@ -38,9 +40,11 @@ function LoginForm() {
             });
 
             showToast("success", json.message || "Connexion réussie.", "top_center", 3000);
+            login(json.data);
+            console.log("Utilisateur connecté : " + userID);
 
             setTimeout(() => {
-                navigate("/profile");
+                navigate("/");
             }, 1000);
         } catch (error) {
             const msg = error instanceof Error ? error.message : String(error);

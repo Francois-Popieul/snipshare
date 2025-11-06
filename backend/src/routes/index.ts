@@ -6,7 +6,7 @@ import { authRouter } from "./auth";
 const router = Router();
 
 router.use("/snippets", snippetRouter);
-router.use("/profile", userRouter);
+router.use("/user", userRouter);
 router.use("/auth", authRouter);
 
 export default router;
