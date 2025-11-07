@@ -71,8 +71,6 @@ export class SnippetRepository extends Repository {
 
       if (result.rowCount === 0) return null;
 
-      console.log(result.rows[0]);
-
       const snippets: SnippetDetails[] = result.rows.map((row) => {
         return new SnippetDetails(
           row.id_snippet,
@@ -254,8 +252,6 @@ export class SnippetRepository extends Repository {
 
       if (result.rowCount === 0) return null;
 
-      console.log(result.rows[0]);
-
       const snippets: SnippetDetails[] = result.rows.map((row) => {
         return new SnippetDetails(
           row.id_snippet,
@@ -353,8 +349,6 @@ export class SnippetRepository extends Repository {
       const result = await this.pool.query(query);
 
       if (result.rowCount === 0) return null;
-
-      console.log(result.rows[0]);
 
       const snippets: SnippetDetails[] = result.rows.map((row) => {
         return new SnippetDetails(

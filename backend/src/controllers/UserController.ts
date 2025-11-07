@@ -8,7 +8,6 @@ export class UserController extends Controller {
 
         try {
             const user = await userRepository.findUserData(userId);
-            console.log(user);
 
             if (!user) {
                 return this.response.status(404).json({ message: "Utilisateur introuvable." });

@@ -9,7 +9,6 @@ import type { ToastMessage } from "../types/toastMessage";
 import Toaster from "../components/ui/Toaster";
 import { useApiFetch } from "../hooks/useApiFetch";
 import { useNavigate } from "react-router";
-// import useAuth from "../hooks/useAuth";
 
 
 function SignupForm() {
@@ -17,8 +16,6 @@ function SignupForm() {
     const [selectedGender, setSelectedGender] = useState("");
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
     const { fetchApi } = useApiFetch<number>();
-    // const { userID, login } = useAuth();
-
 
     function showToast(
         type: ToastMessage["type"],
@@ -34,7 +31,6 @@ function SignupForm() {
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
         const mailRegEx = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/;
-        console.log(data);
 
         if (!mailRegEx.test(data.password.toString())) {
             showToast(
@@ -57,7 +53,6 @@ function SignupForm() {
         }
 
         try {
-            // Appel direct à fetchApi (useApiFetch expose fetchApi)
             const json = await fetchApi({
                 method: "POST",
                 path: "/auth/signup",
@@ -65,12 +60,8 @@ function SignupForm() {
                 credentials: "include",
             });
 
-            // fetchApi lève une erreur si response.ok === false, donc ici c'est un succès
             showToast("success", json.message || "Inscription réussie.", "top_center", 3000);
-            // login(json.data);
-            // console.log("Utilisateur connecté : " + userID);
 
-            // Redirection vers la page de connexion après 1 seconde
             setTimeout(() => {
                 navigate("/login");
             }, 1000);
@@ -81,7 +72,6 @@ function SignupForm() {
     }
 
     function setGender(selectedGender: string) {
-        console.log("Genre sélectionné :", selectedGender);
         setSelectedGender(selectedGender);
     }
 

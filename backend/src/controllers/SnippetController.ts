@@ -24,10 +24,9 @@ export class SnippetController extends Controller {
     async browseById() {
         const snippetRepository = new SnippetRepository();
         const snippetId = this.request.params.id;
-        console.log("Id du snippet : " + snippetId);
+
         try {
             const snippet = await snippetRepository.findByID(snippetId);
-            console.log(snippet);
 
             if (!snippet) {
                 return this.response.status(404).json({ message: "Snippet introuvable." });
@@ -46,10 +45,9 @@ export class SnippetController extends Controller {
     async browseCreatedByUser() {
         const snippetRepository = new SnippetRepository();
         const userId = this.request.params.id;
-        console.log("Id de l’utilisateur : " + userId);
+
         try {
             const snippets = await snippetRepository.findCreatedByUserID(userId);
-            console.log(snippets);
 
             if (!snippets) {
                 return this.response.status(404).json({ message: "Snippets introuvables." });
@@ -68,10 +66,9 @@ export class SnippetController extends Controller {
     async browseLikedByUser() {
         const snippetRepository = new SnippetRepository();
         const userId = this.request.params.id;
-        console.log("Id de l’utilisateur : " + userId);
+
         try {
             const snippets = await snippetRepository.findLikedByUserID(userId);
-            console.log(snippets);
 
             if (!snippets) {
                 return this.response.status(404).json({ message: "Snippets introuvables." });

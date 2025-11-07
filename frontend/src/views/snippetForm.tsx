@@ -60,21 +60,17 @@ function SnippetForm() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
-        console.log("Données du formulaire :", data);
     }
 
     function setLanguage(selectedLanguageValue: string, selectedLanguageName: string) {
-        console.log("Langage sélectionné :", selectedLanguageValue);
         setSelectedLanguage(selectedLanguageValue);
     }
 
     function setVisibility(selectedVisibilityValue: string, selectedVisibilityName: string) {
-        console.log("Visibilité sélectionnée :", selectedVisibilityValue);
         setSelectedVisibility(selectedVisibilityValue);
     }
 
     function addTag(selectedTagValue: string, selectedTagName: string) {
-        console.log("Étiquette sélectionnée :", selectedTagValue);
 
         if (selectedTagName === "-- Sélectionnez une étiquette --") {
             return;

@@ -28,7 +28,6 @@ function LoginForm() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
-        console.log("Données du formulaire :", data);
 
         try {
             const json = await fetchApi({
@@ -40,7 +39,6 @@ function LoginForm() {
 
             showToast("success", json.message || "Connexion réussie.", "top_center", 3000);
             login(json.data);
-            console.log("Utilisateur connecté : " + userID);
 
             setTimeout(() => {
                 navigate("/");

@@ -21,7 +21,7 @@ function Navbar() {
             {isMobile && (<><BurgerMenu /></>)}
             {!isMobile && (<><div className="row_flex_container">
                 <Link to={"/snippets"}><Button name="Parcourir les snippets" width="large" variant="outline" /></Link>
-                <Link to={"/"}><Button name="Snippets populaires" width="large" variant="outline" /></Link>
+                <Link to={"/snippets"}><Button name="Snippets populaires" width="large" variant="outline" /></Link>
             </div>
 
                 {userID && (<div className="row_flex_container">

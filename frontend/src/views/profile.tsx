@@ -48,12 +48,10 @@ function Profile() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
-        console.log("Données du formulaire :", data);
     }
 
     function setGender(selectedGenderValue: string, selectedGenderName: string) {
         console.log("Genre sélectionné :", selectedGenderValue);
-        console.log("Genre sélectionné :", selectedGenderName);
     }
 
     const { fetchApi: userFetchApi, result: userResult, isLoading: userIsLoading, isError: userIsError, errorMsg: userErrorMessage } = useApiFetch<User>();

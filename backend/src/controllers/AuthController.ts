@@ -43,7 +43,6 @@ export class AuthController extends Controller {
             hashedPassword,
             body.bio,
         );
-        console.log("Nouvel utilisateur : " + JSON.stringify(newUser));
 
         if (!newUser) {
             return this.response.status(400).json({
@@ -58,8 +57,6 @@ export class AuthController extends Controller {
             algorithm: "HS256",
             expiresIn: jwtTimeToLive,
         });
-
-        console.log(jwtToken);
 
         const tokenRepository = new TokenRepository();
         const newToken = tokenRepository.createToken(
@@ -95,13 +92,13 @@ export class AuthController extends Controller {
         const authRepository = new AuthRepository();
         const existingUser = await authRepository.findByEmail(body.email);
         if (existingUser) {
-            // const validPassword: boolean = await argon2.verify(existingUser.password, body.password);
-            // if (validPassword) {
-            return this.response.status(200).json({
-                message: "Connexion réussie.",
-                data: existingUser.id_user,
-            })
-            // }
+            const validPassword: boolean = await argon2.verify(existingUser.password, body.password);
+            if (validPassword) {
+                return this.response.status(200).json({
+                    message: "Connexion réussie.",
+                    data: existingUser.id_user,
+                })
+            }
         }
 
         return this.response.status(400).json({
