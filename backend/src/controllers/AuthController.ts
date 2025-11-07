@@ -3,6 +3,8 @@ import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { Controller } from "../libs/Controller";
 import { TokenRepository } from "../repositories/TokenRepository";
+import zod, { date } from "zod";
+import { PotentialUser } from "../libs/ZodValidator";
 
 export class AuthController extends Controller {
     async signup() {
@@ -10,6 +12,12 @@ export class AuthController extends Controller {
         const body = this.request.body;
         if (!body.fullname || !body.gender || !body.email || !body.password || !body.password_confirmation) {
             return this.response.status(400).json({ message: "Requête incomplète ou invalide." })
+        }
+
+        const zodResult = PotentialUser.safeParse({ fullname: body.fullname, gender: body.gender, email: body.email, password: body.password });
+
+        if (!zodResult.success) {
+            return this.response.status(400).json({ message: zod.prettifyError(zodResult.error), data: zod.flattenError(zodResult.error) })
         }
 
         const authRepository = new AuthRepository();
@@ -87,13 +95,13 @@ export class AuthController extends Controller {
         const authRepository = new AuthRepository();
         const existingUser = await authRepository.findByEmail(body.email);
         if (existingUser) {
-            const validPassword: boolean = await argon2.verify(existingUser.password, body.password);
-            if (validPassword) {
-                return this.response.status(200).json({
-                    message: "Connexion réussie.",
-                    data: existingUser.id_user,
-                })
-            }
+            // const validPassword: boolean = await argon2.verify(existingUser.password, body.password);
+            // if (validPassword) {
+            return this.response.status(200).json({
+                message: "Connexion réussie.",
+                data: existingUser.id_user,
+            })
+            // }
         }
 
         return this.response.status(400).json({

@@ -35,6 +35,18 @@
     }
 }
 
+.button_outline_on_dark_background {
+    background-color: transparent;
+    border: solid 2px var(--color-slate-400);
+    color: var(--color-slate-100);
+
+    &:hover {
+        background-color: var(--color-slate-300);
+        color: var(--color-slate-900);
+        border: none;
+    }
+}
+
 .button_default {
     width: fit-content;
     height: 40px;

@@ -5,7 +5,7 @@ export class LanguageRepository extends Repository {
     async findAll(): Promise<Language[] | null> {
         const query = {
             name: "find-languages",
-            text: "SELECT * FROM language",
+            text: "SELECT * FROM code_language",
         };
 
         try {

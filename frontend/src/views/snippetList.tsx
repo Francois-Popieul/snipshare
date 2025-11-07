@@ -34,12 +34,12 @@ function SnippetList() {
                             creation_date={new Date(snippet.creation_date).toLocaleDateString('fr-FR')}
                             title={snippet.title}
                             description={snippet.description}
-                            tags={snippet.tags} // À implémenter quand les tags seront disponibles
-                            author={snippet.author.username} // Nom de l'utilisateur à récupérer autrement
+                            tags={snippet.tags}
+                            author={snippet.author.username}
                             authorGender={snippet.author.gender}
                             isLiked={false} // À implémenter avec la table rates
-                            likeNumber={snippet.ratings.length} // À implémenter avec COUNT sur rates
-                            commentNumber={snippet.comments.length} // À implémenter avec COUNT sur comments
+                            likeNumber={snippet.ratings.length}
+                            commentNumber={snippet.comments.length}
                         />
                     ))
                 ) : (

@@ -69,7 +69,7 @@ function Homepage() {
                 <h2>Prêt à partager votre code ?</h2>
                 <p>Rejoignez vos collègues pour construire une base de codes réutilisables dès aujourd’hui.</p>
                 <div><Button type="button" name="Créer un compte" width="medium" variant="plain" onClick={showAccountCreationPage} />
-                    <Link to={"/snippets"}><Button type="button" name="Voir les snippets" width="medium" variant="outline" /></Link></div>
+                    <Link to={"/snippets"}><Button type="button" name="Voir les snippets" width="medium" variant="outline_on_dark_background" /></Link></div>
             </div>
 
             {toastMessage && (

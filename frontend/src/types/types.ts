@@ -59,7 +59,7 @@ export type Language = {
 };
 
 export type Tag = {
-    id_tag?: number;
+    id_tag: string;
     name: string;
 };
 

@@ -8,17 +8,44 @@ import "../main.css"
 import FormFieldset from "../components/ui/FormFieldset";
 import FormTextAreaGroup from "../components/ui/FormTextAreaGroup";
 import FormCodeInputGroup from "../components/ui/FormCodeInputGroup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SnippetTag from "../components/ui/SnippetTag";
 import Toaster from "../components/ui/Toaster";
 import type { ToastMessage } from "../types/toastMessage";
-import type { Tag } from "../types/tag";
+import type { Tag } from "../types/types";
+import { useApiFetch } from "../hooks/useApiFetch";
+import type { Language } from "../types/types";
 
 function SnippetForm() {
     const [selectedLanguage, setSelectedLanguage] = useState("");
     const [selectedVisibility, setSelectedVisibility] = useState("");
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
+
+    const { fetchApi: languageFetchApi, result: languageResult, isLoading: languageIsLoading, isError: languageIsError, errorMsg: languageErrorMessage } = useApiFetch<Language[]>();
+
+    useEffect(() => {
+        languageFetchApi({
+            method: "GET",
+            path: "/snippets/languages",
+        }).catch((error) => {
+            console.error("Erreur lors du fetch :", error);
+        });
+    }, []);
+
+    const { fetchApi: tagFetchApi, result: tagResult, isLoading: tagIsLoading, isError: tagIsError, errorMsg: tagErrorMessage } = useApiFetch<Tag[]>();
+
+    useEffect(() => {
+        tagFetchApi({
+            method: "GET",
+            path: "/snippets/tags",
+        }).catch((error) => {
+            console.error("Erreur lors du fetch :", error);
+        });
+    }, []);
+
+    if (languageIsLoading) return <p>Chargement…</p>;
+    if (languageIsError) return <p>Erreur : {languageErrorMessage}</p>;
 
     function showToast(
         type: ToastMessage["type"],
@@ -53,7 +80,7 @@ function SnippetForm() {
             return;
         }
 
-        if (selectedTags.some(tag => tag.value === selectedTagValue)) {
+        if (selectedTags.some(tag => tag.id_tag === selectedTagValue)) {
             showToast(
                 "information",
                 "Étiquette déjà ajoutée.",
@@ -73,7 +100,7 @@ function SnippetForm() {
             return;
         }
 
-        setSelectedTags((prev: Tag[]) => [...prev, { value: selectedTagValue, name: selectedTagName }]);
+        setSelectedTags((prev: Tag[]) => [...prev, { id_tag: selectedTagValue, name: selectedTagName }]);
         showToast(
             "success",
             "Étiquette ajoutée.",
@@ -83,7 +110,7 @@ function SnippetForm() {
     }
 
     function RemoveTag(value: string) {
-        setSelectedTags((prev: Tag[]) => prev.filter(t => t.value !== value));
+        setSelectedTags((prev: Tag[]) => prev.filter(t => t.id_tag !== value));
         showToast(
             "success",
             "Étiquette supprimée.",
@@ -108,24 +135,10 @@ function SnippetForm() {
                         name="language"
                         options={[
                             { value: "", name: "-- Sélectionnez le langage --" },
-                            { value: "javascript", name: "JavaScript" },
-                            { value: "typescript", name: "TypeScript" },
-                            { value: "python", name: "Python" },
-                            { value: "java", name: "Java" },
-                            { value: "csharp", name: "C#" },
-                            { value: "cpp", name: "C++" },
-                            { value: "go", name: "Go" },
-                            { value: "ruby", name: "Ruby" },
-                            { value: "php", name: "PHP" },
-                            { value: "swift", name: "Swift" },
-                            { value: "kotlin", name: "Kotlin" },
-                            { value: "rust", name: "Rust" },
-                            { value: "dart", name: "Dart" },
-                            { value: "scala", name: "Scala" },
-                            { value: "elixir", name: "Elixir" },
-                            { value: "haskell", name: "Haskell" },
-                            { value: "shell", name: "Shell / Bash" },
-                            { value: "sql", name: "SQL" }
+                            ...(languageResult?.data ?? []).map(language => ({
+                                value: String(language.id_language),
+                                name: language.name,
+                            })),
                         ]}
                         onChange={setLanguage}
                     />
@@ -146,21 +159,10 @@ function SnippetForm() {
                         name="tag"
                         options={[
                             { value: "", name: "-- Sélectionnez une étiquette --" },
-                            { value: "function", name: "Fonction" },
-                            { value: "component", name: "Composant" },
-                            { value: "hook", name: "Hook" },
-                            { value: "utility", name: "Utilitaire" },
-                            { value: "style", name: "Style / CSS" },
-                            { value: "config", name: "Configuration" },
-                            { value: "context", name: "Contexte" },
-                            { value: "test", name: "Test" },
-                            { value: "api", name: "Appel API" },
-                            { value: "query", name: "Requête" },
-                            { value: "schema", name: "Schéma / Validation" },
-                            { value: "middleware", name: "Middleware" },
-                            { value: "route", name: "Route" },
-                            { value: "animation", name: "Animation" },
-                            { value: "doc", name: "Documentation" }
+                            ...(tagResult?.data ?? []).map(tag => ({
+                                value: String(tag.id_tag),
+                                name: tag.name,
+                            })),
                         ]}
                         onChange={addTag}
                     />
@@ -169,7 +171,7 @@ function SnippetForm() {
                             <SnippetTag
                                 key={index}
                                 name={tag.name}
-                                value={tag.value}
+                                value={tag.id_tag}
                                 onRemove={RemoveTag}
                             />
                         ))}
@@ -186,7 +188,7 @@ function SnippetForm() {
                     onClose={() => setToastMessage(null)}
                 />
             )}
-            
+
         </main >
         <Footer />
     </>

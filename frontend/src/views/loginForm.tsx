@@ -6,7 +6,6 @@ import FormInputGroup from "../components/ui/FormInputGroup";
 import { useNavigate } from "react-router";
 import type { ToastMessage } from "../types/toastMessage";
 import { useApiFetch } from "../hooks/useApiFetch";
-import type { User } from "../types/types";
 import Toaster from "../components/ui/Toaster";
 import useAuth from "../hooks/useAuth";
 

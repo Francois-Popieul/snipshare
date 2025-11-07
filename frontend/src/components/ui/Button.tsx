@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 interface ButtonProps {
   name: string;
-  variant: "plain" | "outline";
+  variant: "plain" | "outline" | "outline_on_dark_background";
   width?: "default" | "very_small" | "small" | "medium" | "large" | "extra_large";
   type?: "submit" | "button";
   special?: "right_side" | "left_side";

@@ -38,6 +38,50 @@ export class SnippetController extends Controller {
                 data: snippet,
             });
         } catch (error) {
+            console.error("Erreur lors de la récupération du snippet : ", error);
+            return this.response.status(500).json({ message: "Erreur interne du serveur." });
+        }
+    };
+
+    async browseCreatedByUser() {
+        const snippetRepository = new SnippetRepository();
+        const userId = this.request.params.id;
+        console.log("Id de l’utilisateur : " + userId);
+        try {
+            const snippets = await snippetRepository.findCreatedByUserID(userId);
+            console.log(snippets);
+
+            if (!snippets) {
+                return this.response.status(404).json({ message: "Snippets introuvables." });
+            }
+
+            return this.response.status(200).json({
+                message: "Snippets récupérés avec succès",
+                data: snippets,
+            });
+        } catch (error) {
+            console.error("Erreur lors de la récupération des snippets : ", error);
+            return this.response.status(500).json({ message: "Erreur interne du serveur." });
+        }
+    };
+
+    async browseLikedByUser() {
+        const snippetRepository = new SnippetRepository();
+        const userId = this.request.params.id;
+        console.log("Id de l’utilisateur : " + userId);
+        try {
+            const snippets = await snippetRepository.findLikedByUserID(userId);
+            console.log(snippets);
+
+            if (!snippets) {
+                return this.response.status(404).json({ message: "Snippets introuvables." });
+            }
+
+            return this.response.status(200).json({
+                message: "Snippets récupérés avec succès",
+                data: snippets,
+            });
+        } catch (error) {
             console.error("Erreur lors de la récupération des snippets : ", error);
             return this.response.status(500).json({ message: "Erreur interne du serveur." });
         }

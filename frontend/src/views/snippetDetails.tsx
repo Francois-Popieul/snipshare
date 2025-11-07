@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import Footer from "../components/partials/Footer";
 import Navbar from "../components/partials/Navbar";
 import { MdOutlineArrowBack } from "react-icons/md";
@@ -14,10 +14,14 @@ import { useApiFetch } from "../hooks/useApiFetch";
 import type { SnippetDetails } from "../types/types";
 import UserGenderIcon from "../components/ui/UserGenderIcon";
 import { useIsMobile } from "../hooks/useMobile";
+import useAuth from "../hooks/useAuth";
 
 function SnippetDetailView() {
     const isMobile = useIsMobile();
     const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
+    const { userID } = useAuth();
+    const navigate = useNavigate();
+
 
     function showToast(
         type: ToastMessage["type"],
@@ -41,6 +45,11 @@ function SnippetDetailView() {
             console.error("Erreur lors du fetch :", error);
         });
     }, [id]);
+
+    if (result && result.data.visibility === "private" && userID !== result.data.author.id) {
+        navigate("/snippets");
+        return;
+    }
 
     if (isLoading) return <p>Chargement…</p>;
     if (isError) return <p>Erreur : {errorMsg}</p>;

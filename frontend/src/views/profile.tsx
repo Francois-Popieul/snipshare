@@ -12,7 +12,7 @@ import UserGenderIcon from "../components/ui/UserGenderIcon";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 import { useApiFetch } from "../hooks/useApiFetch";
-import type { User } from "../types/types";
+import type { SnippetDetails, User } from "../types/types";
 
 function Profile() {
     const navigate = useNavigate();
@@ -20,6 +20,7 @@ function Profile() {
     const [userEditMode, setUserEditMode] = useState(false);
     const [snippetToggler, setSnippetToggler] = useState(false);
     const { userID } = useAuth();
+    const [snippets, setSnippets] = useState<SnippetDetails[] | undefined>([])
 
     function toggleUserEdit() {
         setUserEditMode(prev => !prev);
@@ -27,6 +28,20 @@ function Profile() {
 
     function toggleSnippetToggler() {
         setSnippetToggler(prev => !prev);
+    }
+
+    function showCreatedSnippets() {
+        if (snippetToggler !== false) {
+            setSnippets(userCreatedSnippetResult?.data);
+            setSnippetToggler(false);
+        }
+    }
+
+    function showLikedSnippets() {
+        if (snippetToggler !== true) {
+            setSnippets(userLikedSnippetResult?.data);
+            setSnippetToggler(true);
+        }
     }
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -41,23 +56,56 @@ function Profile() {
         console.log("Genre sélectionné :", selectedGenderName);
     }
 
-    if (userID === null) {
-        navigate("/");
-    }
+    const { fetchApi: userFetchApi, result: userResult, isLoading: userIsLoading, isError: userIsError, errorMsg: userErrorMessage } = useApiFetch<User>();
 
-    const { fetchApi, result, isLoading, isError, errorMsg } = useApiFetch<User>();
+    const { fetchApi: userCreatedSnippetFetchApi, result: userCreatedSnippetResult, isLoading: userCreatedSnippetIsLoading, isError: userCreatedSnippetIsError, errorMsg: userCreatedSnippetErrorMessage } = useApiFetch<SnippetDetails[]>();
+
+    const { fetchApi: userLikedSnippetFetchApi, result: userLikedSnippetResult, isLoading: userLikedSnippetIsLoading, isError: userLikedSnippetIsError, errorMsg: userLikedSnippetErrorMessage } = useApiFetch<SnippetDetails[]>();
 
     useEffect(() => {
-        fetchApi({
+        // Rediriger si pas d'utilisateur connecté
+        if (userID === null) {
+            navigate("/login");
+            return;
+        }
+
+        userFetchApi({
             method: "GET",
             path: `/user/${userID}`,
         }).catch((error) => {
             console.error("Erreur lors du fetch :", error);
         });
+
+        userCreatedSnippetFetchApi({
+            method: "GET",
+            path: `/user/created-snippets/${userID}`,
+        }).catch((error) => {
+            console.error("Erreur lors du fetch :", error);
+        });
+
+        userLikedSnippetFetchApi({
+            method: "GET",
+            path: `/user/liked-snippets/${userID}`,
+        }).catch((error) => {
+            console.error("Erreur lors du fetch :", error);
+        });
     }, []);
 
-    if (isLoading) return <p>Chargement…</p>;
-    if (isError) return <p>Erreur : {errorMsg}</p>;
+    useEffect(() => {
+        setSnippets(userCreatedSnippetResult?.data);
+        setSnippetToggler(true);
+    }, [userCreatedSnippetResult]);
+
+    useEffect(() => {
+        setSnippets(userLikedSnippetResult?.data);
+        setSnippetToggler(false);
+    }, [userLikedSnippetResult]);
+
+    if (userID === null) {
+        return <p>Redirection…</p>;
+    }
+    if (userIsLoading) return <p>Chargement…</p>;
+    if (userIsError) return <p>Erreur : {userErrorMessage}</p>;
 
     return <>
         <Navbar />
@@ -66,10 +114,10 @@ function Profile() {
                 <div className="profile_main_container">
                     <div className="profile_top_container">
                         <div className="user_details">
-                            <UserGenderIcon gender="male" size={48} />
+                            <UserGenderIcon gender={userResult ? userResult.data.gender : "other"} size={48} />
                             <div>
-                                <p className="profile_author">François</p>
-                                <p className="profile_email">francois.Popieul@hotmail.fr</p>
+                                <p className="profile_author">{userResult?.data.username}</p>
+                                <p className="profile_email">{userResult?.data.mail_address}</p>
                             </div>
                         </div>
                         {userEditMode === false && (
@@ -82,7 +130,7 @@ function Profile() {
                             />
                         )}
                     </div>
-                    {userID ? <div className="biography">blabla</div> : <div className="biography">Aucune information saisie à votre sujet. Cliquez sur <strong>Modifier</strong> pour ajouter votre biographie.</div>}
+                    {userResult?.data.bio != null ? <div className="biography">{userResult.data.bio}</div> : <div className="biography">Aucune information saisie à votre sujet. Cliquez sur <strong>Modifier</strong> pour ajouter votre biographie.</div>}
                 </div>
 
                 {userEditMode === true && (
@@ -113,23 +161,30 @@ function Profile() {
             </form>
             <div className="profile_snippet_container">
                 <div className={isMobile ? "snippet_button_container mobile_snippet_button_container" : "snippet_button_container desktop_snippet_button_container"}>
-                    <Button type="button" name="Snippets créés" variant={snippetToggler === false ? "plain" : "outline"} width="extra_large" special="left_side" onClick={toggleSnippetToggler}></Button>
-                    <Button type="button" name="Snippets likés" variant={snippetToggler === false ? "outline" : "plain"} width="extra_large" special="right_side" onClick={toggleSnippetToggler}></Button>
+                    <Button type="button" name="Snippets créés" variant={snippetToggler === false ? "plain" : "outline"} width="extra_large" special="left_side" onClick={showCreatedSnippets}></Button>
+                    <Button type="button" name="Snippets likés" variant={snippetToggler === false ? "outline" : "plain"} width="extra_large" special="right_side" onClick={showLikedSnippets}></Button>
                 </div>
                 <div className="profile_snippet_list">
-                    <SnippetCard
-                        id={1}
-                        languages={["C++"]}
-                        creation_date="10/01/2024"
-                        title="Snippet qui fait des trucs"
-                        description="Snippet vraiment très utile"
-                        tags={["SQL", "JavaScript", "TypeScript"]}
-                        author="François Popieul"
-                        authorGender="male"
-                        isLiked={true}
-                        likeNumber={24}
-                        commentNumber={10}
-                    />
+                    {snippets && snippets.length > 0 ? (
+                        snippets.map((snippet) => (
+                            <SnippetCard
+                                key={snippet.id_snippet}
+                                id={snippet.id_snippet}
+                                languages={snippet.languages}
+                                creation_date={new Date(snippet.creation_date).toLocaleDateString('fr-FR')}
+                                title={snippet.title}
+                                description={snippet.description}
+                                tags={snippet.tags}
+                                author={snippet.author.username}
+                                authorGender={snippet.author.gender}
+                                isLiked={false} // À implémenter avec la table rates
+                                likeNumber={snippet.ratings.length}
+                                commentNumber={snippet.comments.length}
+                            />
+                        ))
+                    ) : (
+                        <p>Aucun snippet disponible.</p>
+                    )}
                 </div>
             </div>
         </main>

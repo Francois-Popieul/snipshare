@@ -33,7 +33,18 @@ function SignupForm() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
+        const mailRegEx = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/;
         console.log(data);
+
+        if (!mailRegEx.test(data.password.toString())) {
+            showToast(
+                "error",
+                "Le mot de passe doit comprendre de 8 à 16 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.",
+                "top_center",
+                5000
+            );
+            return;
+        }
 
         if (data.password !== data.password_confirmation) {
             showToast(
