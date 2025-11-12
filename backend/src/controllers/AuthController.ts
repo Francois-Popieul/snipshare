@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { Controller } from "../libs/Controller";
 import { TokenRepository } from "../repositories/TokenRepository";
 import zod, { date } from "zod";
-import { PotentialUser } from "../libs/ZodValidator";
+import { NewUser } from "../libs/ZodValidator";
 
 export class AuthController extends Controller {
     async signup() {
@@ -14,7 +14,7 @@ export class AuthController extends Controller {
             return this.response.status(400).json({ message: "Requête incomplète ou invalide." })
         }
 
-        const zodResult = PotentialUser.safeParse({ fullname: body.fullname, gender: body.gender, email: body.email, password: body.password });
+        const zodResult = NewUser.safeParse({ fullname: body.fullname, gender: body.gender, email: body.email, password: body.password });
 
         if (!zodResult.success) {
             return this.response.status(400).json({ message: zod.prettifyError(zodResult.error), data: zod.flattenError(zodResult.error) })

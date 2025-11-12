@@ -1,5 +1,6 @@
 import { Repository } from "../libs/Repository";
-import { Snippet, SnippetDetails } from "../models/Snippet";
+import { SnippetDetails } from "../models/Snippet";
+import { Snippet, Tag } from "../types/types";
 
 export class SnippetRepository extends Repository {
   async findAll(status: string): Promise<SnippetDetails[] | null> {
@@ -371,5 +372,77 @@ export class SnippetRepository extends Repository {
     }
 
     return null;
+  };
+
+  async addSnippet(newSnippet: Snippet) {
+    const query = {
+      name: "add-snippet",
+      text: `INSERT INTO snippet (title, description, code, creation_date, visibility, user_id)
+              VALUES ($1, $2, $3, $4, $5, $6)
+              RETURNING id_snippet`,
+      values: [newSnippet.title,
+      newSnippet.description,
+      newSnippet.code,
+      newSnippet.creation_date,
+      newSnippet.visibility,
+      newSnippet.user_id],
+    };
+
+    try {
+      const result = await this.pool.query<{ id_snippet: number }>(query);
+
+      if (result.rowCount === 0) return null;
+
+      return result.rows[0];
+    } catch (error) {
+      console.log(error);
+    }
+
+    return false;
+  };
+
+  async linkSnippetAndLanguage(snippetID: number, languageID: number) {
+    const query = {
+      name: "link-snippet-and-language",
+      text: `INSERT INTO utilize (snippet_id, language_id)
+             VALUES ($1, $2);`,
+      values: [snippetID, languageID],
+    };
+
+    try {
+      const result = await this.pool.query(query);
+
+      if (result.rowCount === 0) return false;
+
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return false;
+  };
+
+  async linkSnippetAndTags(snippetID: number, snippetTags: Tag[]) {
+    const client = await this.pool.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      for (const tag of snippetTags) {
+        await client.query(
+          `INSERT INTO categorize (snippet_id, tag_id) VALUES ($1, $2);`,
+          [snippetID, tag.id_tag]
+        );
+      }
+
+      await client.query('COMMIT');
+      return true;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      console.error(error);
+      return false;
+    } finally {
+      client.release();
+    }
   };
 };

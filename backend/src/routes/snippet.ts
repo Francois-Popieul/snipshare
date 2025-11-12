@@ -20,6 +20,11 @@ snippetRouter.get("/tags", (request, response) => {
     controller.browse();
 });
 
+snippetRouter.post("/creation", (request, response) => {
+    const controller = new SnippetController(request, response);
+    controller.addSnippet();
+});
+
 snippetRouter.get("/:id", (request, response) => {
     const controller = new SnippetController(request, response);
     controller.browseById();

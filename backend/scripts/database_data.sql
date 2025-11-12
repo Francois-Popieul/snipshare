@@ -212,14 +212,14 @@ VALUES (
         'Denis Ritchie',
         'male',
         'denis.ritchie@ara.gouv.fr',
-        'securePass123',
+        '$argon2i$v=19$m=16,t=2,p=1$Rm9Ja2x5MXg0Mm14VzFuYg$/asYywHh3HL6LVnpTp9MMQ',
         ''
     ),
     (
         'Ada Lovelace',
         'female',
         'ada.lovelace@ara.gouv.fr',
-        'codeQueen456',
+        '$argon2i$v=19$m=16,t=2,p=1$Rm9Ja2x5MXg0Mm14VzFuYg$ZJkND4Jv9fw/qNwp2VQsgA',
         ''
     );
 

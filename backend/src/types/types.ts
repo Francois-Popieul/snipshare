@@ -16,7 +16,7 @@ export type Snippet = {
     title: string;
     description: string;
     code: string;
-    creation_date: Date;
+    creation_date: string;
     visibility: Visibility;
     user_id: number;
 }
